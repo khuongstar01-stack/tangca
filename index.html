@@ -116,21 +116,22 @@
   padding: 60px 28px;
   border-radius: 20px;
   box-shadow: 4px 4px rgb(0, 2, 65);
-  font-family: cursive;
-  width: fit-content;
-  margin: 40px auto;
+  font-family: Arial, Helvetica, sans-serif;
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto;
 }
 
 .heading {
   font-size: 25px;
   text-align: center;
   font-weight: 600;
-  font-family: cursive;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .form-label {
   font-size: 16px;
-  font-family: cursive;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .form .input {
@@ -141,7 +142,7 @@
   border-color: black;
   font-size: 15px;
   box-shadow: 2px 3px rgb(0, 2, 65);
-  font-family: cursive;
+  font-family: Arial, Helvetica, sans-serif;
   background: white;
   margin: 0;
 }
@@ -156,7 +157,7 @@
   font-size: medium;
   font-weight: 600;
   transition: 400ms;
-  font-family: cursive;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .form button:hover {
@@ -171,7 +172,7 @@
 
 .forgot a {
   color: rgba(0, 0, 0, 0.994);
-  font-family: cursive;
+  font-family: Arial, Helvetica, sans-serif;
   text-decoration: none;
   transition: 400ms;
 }
@@ -204,7 +205,7 @@
   padding: 60px 28px;
   border-radius: 20px;
   box-shadow: 4px 4px rgb(0, 2, 65);
-  font-family: cursive;
+  font-family: Arial, Helvetica, sans-serif;
   width: 100%;
   max-width: 380px;
   box-sizing: border-box;
@@ -214,12 +215,12 @@
   font-size: 25px;
   text-align: center;
   font-weight: 600;
-  font-family: cursive;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .change-pass-label {
   font-size: 16px;
-  font-family: cursive;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .change-pass-input {
@@ -230,7 +231,7 @@
   border-color: black;
   font-size: 15px;
   box-shadow: 2px 3px rgb(0, 2, 65);
-  font-family: cursive;
+  font-family: Arial, Helvetica, sans-serif;
   background: white;
   margin: 0;
   box-sizing: border-box;
@@ -253,7 +254,7 @@
   font-size: medium;
   font-weight: 600;
   transition: 400ms;
-  font-family: cursive;
+  font-family: Arial, Helvetica, sans-serif;
   border: none;
   cursor: pointer;
 }
@@ -917,7 +918,163 @@
   }
 }
 
+/* ===== FIX MOBILE FONT + FIX KHOẢNG TRẮNG DƯ ===== */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+  font-family: Arial, Helvetica, sans-serif;
+}
 
+* {
+  box-sizing: border-box;
+}
+
+body {
+  position: relative;
+}
+
+/* nền cố định nhưng không làm trang bị tràn */
+.bg-gradient-grid {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+/* phần chính không bị rộng quá màn hình */
+.container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* form đăng nhập */
+.login-wrap {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+}
+
+/* đổi font để mobile không bị chữ nghệ thuật lỗi */
+.form,
+.heading,
+.form-label,
+.form .input,
+.form button,
+.forgot a,
+.change-pass-form,
+.change-pass-heading,
+.change-pass-label,
+.change-pass-input,
+.change-pass-btn,
+.change-pass-cancel {
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+
+/* chỉnh form gọn và cố định trên mobile */
+.form {
+  width: min(100%, 380px);
+  max-width: 380px;
+  margin: 0 auto;
+  padding: 28px 20px;
+  border-radius: 24px;
+}
+
+.heading {
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.form-label {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.form .input {
+  width: 100%;
+  max-width: 100%;
+  height: 52px;
+  font-size: 16px;
+}
+
+.form button {
+  width: 100%;
+  min-height: 52px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.forgot a {
+  font-size: 15px;
+}
+
+/* header mobile không bị quá cao */
+.app-header {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+/* tránh phần dưới bị dư do các khối fixed */
+#main-ui,
+#admin-ui {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* nếu có nút lưu fixed thì chừa khoảng vừa đủ, không dư quá nhiều */
+@media (max-width: 768px) {
+  body {
+    overflow-x: hidden;
+  }
+
+  .login-wrap {
+    min-height: 100dvh;
+    padding: 20px 14px;
+  }
+
+  .form {
+    width: 100%;
+    max-width: 360px;
+    padding: 24px 18px;
+  }
+
+  .heading {
+    font-size: 28px;
+  }
+
+  .form-label {
+    font-size: 15px;
+  }
+
+  .form .input {
+    height: 50px;
+    font-size: 16px;
+  }
+
+  .form button {
+    min-height: 50px;
+    font-size: 17px;
+  }
+
+  /* nếu trang chính có nút fixed dưới đáy */
+  #main-ui,
+  #admin-ui,
+  .content,
+  .page-content {
+    padding-bottom: 90px;
+  }
+}
     </style>
 </head>
 <body>
