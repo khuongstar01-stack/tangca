@@ -1,0 +1,1672 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Chấm Công</title>
+    <style>
+        :root { --primary: #4361ee; --primary-light: #e0e7ff; --success: #10b981; --danger: #ef4444; --bg: #f3f4f6; --text-main: #1f2937; --text-muted: #6b7280; }
+        body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); margin: 0; padding: 0; color: var(--text-main); }
+        .container { max-width: 500px; margin: auto; padding: 15px; padding-bottom: 90px; }
+        
+        .app-header { background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%); margin: -15px -15px 0px -15px; padding: 20px 20px 30px 20px; display: flex; justify-content: space-between; align-items: center; color: white; position: sticky; top: 0; z-index: 100; }
+        .app-header h3 { margin: 0; font-size: 18px; letter-spacing: 0.5px; }
+        .btn-logout { background: rgba(255,255,255,0.2); border: none; color: white; padding: 6px 12px; border-radius: 20px; font-weight: bold; cursor: pointer; backdrop-filter: blur(5px); }
+
+        .main-nav { display: flex; background: white; margin: 0 -15px 20px -15px; padding: 0 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; position: sticky; top: 72px; z-index: 99;}
+        .main-nav-btn { flex: 1; padding: 15px 0; border: none; background: transparent; font-weight: 700; color: var(--text-muted); font-size: 14px; border-bottom: 3px solid transparent; cursor: pointer; transition: 0.2s;}
+        .main-nav-btn.active { color: var(--primary); border-bottom: 3px solid var(--primary); }
+
+        .login-box { background: white; border-radius: 20px; padding: 40px 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center; margin-top: 50px; }
+        input[type="text"], input[type="password"], input[type="number"], input[inputmode="decimal"], select { width: 100%; padding: 15px; margin: 10px 0; border: 1.5px solid #e5e7eb; border-radius: 12px; font-size: 16px; background: #f9fafb; transition: 0.2s; box-sizing: border-box;}
+        input:focus, select:focus { border-color: var(--primary); outline: none; background: white; box-shadow: 0 0 0 4px var(--primary-light); }
+
+        .tab-container { display: flex; background: #e5e7eb; border-radius: 14px; padding: 4px; margin-bottom: 15px; }
+        .tab-btn { flex: 1; padding: 12px; text-align: center; font-weight: 600; font-size: 13px; cursor: pointer; background: transparent; color: var(--text-muted); border: none; border-radius: 10px; transition: 0.3s ease; }
+        .tab-btn.active { background: white; color: var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.08); }
+
+        .filter-container { margin-bottom: 15px; display: flex; flex-direction: column; gap: 8px; }
+        .search-input { background: white; font-weight: 500; border: 1.5px solid #e5e7eb; padding: 12px 15px; border-radius: 12px; font-size: 15px; width: 100%; box-sizing: border-box; margin: 0 !important; }
+        .shift-select { background-color: white; font-weight: bold; color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin: 0 !important; }
+
+        .worker-card { background: white; border-radius: 16px; margin-bottom: 15px; padding: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); border: 1px solid #f3f4f6; }
+        .w-name { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+        .w-details { font-size: 13px; color: var(--text-muted); display: flex; gap: 8px; flex-wrap: wrap; margin-top: 5px;}
+        .badge { background: #f3f4f6; padding: 4px 8px; border-radius: 6px; font-weight: 600; font-size: 11px;}
+        .badge-shift { background: #e0e7ff; color: #4361ee; } 
+        
+        .time-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 15px; }
+        .time-wrapper { position: relative; display: flex; flex-direction: column; } 
+        .time-wrapper label { font-size: 10px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; text-align: center;}
+        .time-input { padding: 10px 5px; border: none; background: #f3f4f6; border-radius: 10px; text-align: center; font-weight: 700; font-size: 16px; color: var(--text-main); width: 100%; box-sizing: border-box;}
+        .time-input:focus { background: white; box-shadow: 0 0 0 3px var(--primary-light); }
+
+        .suggestions-box {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.16);
+    max-height: 220px;
+    overflow-y: auto;
+    z-index: 9999;
+    border: 1px solid #e5e7eb;
+    padding: 8px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.suggestion-item {
+    padding: 12px 8px;
+    text-align: center;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    font-weight: 700;
+    color: var(--primary);
+    font-size: 15px;
+    cursor: pointer;
+    background: #f8fafc;
+    transition: 0.18s ease;
+    user-select: none;
+}
+
+.suggestion-item:hover {
+    background: var(--primary-light);
+    border-color: #c7d2fe;
+    transform: translateY(-1px);
+}
+
+.suggestion-item.active-suggestion {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+        .disabled-card { background: #f9fafb; border: 1px dashed #d1d5db; opacity: 0.8; pointer-events:none;}
+        .status-badge { background: var(--success); color: white; padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 800; }
+        .disabled-card .time-input { background: #e5e7eb; color: #9ca3af; }
+
+        .btn { width: 100%; padding: 16px; border: none; border-radius: 14px; font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.3s; box-sizing: border-box; }
+        .btn-blue { background: var(--primary); color: white; box-shadow: 0 4px 14px rgba(67, 97, 238, 0.4); }
+        .btn-save { background: var(--success); color: white; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: calc(100% - 40px); max-width: 460px; box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4); border-radius: 100px; z-index: 1000; }
+
+        details summary { cursor: pointer; font-size: 13px; font-weight: bold; color: var(--primary); outline: none; margin-top: 10px; list-style: none; display: flex; justify-content: space-between; align-items: center;}
+        details summary::after { content: "▼"; font-size: 10px; }
+        details[open] summary::after { content: "▲"; }
+        .stat-row { display: flex; justify-content: space-between; border-bottom: 1px solid #e5e7eb; padding: 8px 0; font-size: 13px; color: var(--text-main); }
+        .stat-row:last-child { border-bottom: none; }
+
+        #main-ui, #admin-ui, #loading, #list-da-cham, #thongke-view, .app-header { display: none; }
+.login-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: rgb(241, 241, 130);
+  padding: 60px 28px;
+  border-radius: 20px;
+  box-shadow: 4px 4px rgb(0, 2, 65);
+  font-family: cursive;
+  width: fit-content;
+  margin: 40px auto;
+}
+
+.heading {
+  font-size: 25px;
+  text-align: center;
+  font-weight: 600;
+  font-family: cursive;
+}
+
+.form-label {
+  font-size: 16px;
+  font-family: cursive;
+}
+
+.form .input {
+  padding: 10px;
+  width: 280px;
+  border-radius: 10px;
+  border-style: double;
+  border-color: black;
+  font-size: 15px;
+  box-shadow: 2px 3px rgb(0, 2, 65);
+  font-family: cursive;
+  background: white;
+  margin: 0;
+}
+
+.form button {
+  padding: 10px;
+  border-radius: 10px;
+  margin-top: 20px;
+  background-color: rgb(241, 241, 130);
+  box-shadow: 2px 3px rgb(0, 2, 65);
+  color: rgb(0, 0, 0);
+  font-size: medium;
+  font-weight: 600;
+  transition: 400ms;
+  font-family: cursive;
+}
+
+.form button:hover {
+  background-color: rgb(235, 255, 59);
+  transition: 400ms;
+  cursor: pointer;
+}
+
+.forgot {
+  padding-top: 10px;
+}
+
+.forgot a {
+  color: rgba(0, 0, 0, 0.994);
+  font-family: cursive;
+  text-decoration: none;
+  transition: 400ms;
+}
+
+.forgot a:hover {
+  color: rgba(0, 0, 0, 0.703);
+  transition: 400ms;
+}
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 2000;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.modal-overlay.show {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.change-pass-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: rgb(241, 241, 130);
+  padding: 60px 28px;
+  border-radius: 20px;
+  box-shadow: 4px 4px rgb(0, 2, 65);
+  font-family: cursive;
+  width: 100%;
+  max-width: 380px;
+  box-sizing: border-box;
+}
+
+.change-pass-heading {
+  font-size: 25px;
+  text-align: center;
+  font-weight: 600;
+  font-family: cursive;
+}
+
+.change-pass-label {
+  font-size: 16px;
+  font-family: cursive;
+}
+
+.change-pass-input {
+  padding: 10px;
+  width: 100%;
+  border-radius: 10px;
+  border-style: double;
+  border-color: black;
+  font-size: 15px;
+  box-shadow: 2px 3px rgb(0, 2, 65);
+  font-family: cursive;
+  background: white;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.change-pass-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.change-pass-btn,
+.change-pass-cancel {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: rgb(241, 241, 130);
+  box-shadow: 2px 3px rgb(0, 2, 65);
+  color: rgb(0, 0, 0);
+  font-size: medium;
+  font-weight: 600;
+  transition: 400ms;
+  font-family: cursive;
+  border: none;
+  cursor: pointer;
+}
+
+.change-pass-btn:hover,
+.change-pass-cancel:hover {
+  background-color: rgb(235, 255, 59);
+}
+
+.change-pass-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+.bg-gradient-grid {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+      to bottom,
+      #fff 0%,
+      #fff 40%,
+      rgba(255, 255, 255, 0) 100%
+    ),
+    linear-gradient(to right, #0ed2da, #5f29c7);
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.bg-gradient-grid::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(90deg, #ccc 1px, transparent 1px);
+  background-size: 50px 100%;
+  pointer-events: none;
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0) 70%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0) 70%
+  );
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+}
+/* ===== LOGIN LOADING OVERLAY ===== */
+.login-loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 5000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-loading-overlay.show {
+  display: flex !important;
+}
+
+.login-loading-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  background: rgba(255,255,255,0.9);
+  padding: 24px 28px;
+  border-radius: 20px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+}
+
+.login-loading-text {
+  font-weight: 700;
+  color: var(--primary);
+  font-size: 16px;
+}
+
+/* ===== HAMSTER ===== */
+.wheel-and-hamster {
+  --dur: 1s;
+  position: relative;
+  width: 12em;
+  height: 12em;
+  font-size: 14px;
+}
+
+.wheel,
+.hamster,
+.hamster div,
+.spoke {
+  position: absolute;
+}
+
+.wheel,
+.spoke {
+  border-radius: 50%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.wheel {
+  background: radial-gradient(100% 100% at center,hsla(0,0%,60%,0) 47.8%,hsl(0,0%,60%) 48%);
+  z-index: 2;
+}
+
+.hamster {
+  animation: hamster var(--dur) ease-in-out infinite;
+  top: 50%;
+  left: calc(50% - 3.5em);
+  width: 7em;
+  height: 3.75em;
+  transform: rotate(4deg) translate(-0.8em,1.85em);
+  transform-origin: 50% 0;
+  z-index: 1;
+}
+
+.hamster__head {
+  animation: hamsterHead var(--dur) ease-in-out infinite;
+  background: hsl(30,90%,55%);
+  border-radius: 70% 30% 0 100% / 40% 25% 25% 60%;
+  box-shadow: 0 -0.25em 0 hsl(30,90%,80%) inset,
+    0.75em -1.55em 0 hsl(30,90%,90%) inset;
+  top: 0;
+  left: -2em;
+  width: 2.75em;
+  height: 2.5em;
+  transform-origin: 100% 50%;
+}
+
+.hamster__ear {
+  animation: hamsterEar var(--dur) ease-in-out infinite;
+  background: hsl(0,90%,85%);
+  border-radius: 50%;
+  box-shadow: -0.25em 0 hsl(30,90%,55%) inset;
+  top: -0.25em;
+  right: -0.25em;
+  width: 0.75em;
+  height: 0.75em;
+  transform-origin: 50% 75%;
+}
+
+.hamster__eye {
+  animation: hamsterEye var(--dur) linear infinite;
+  background-color: hsl(0,0%,0%);
+  border-radius: 50%;
+  top: 0.375em;
+  left: 1.25em;
+  width: 0.5em;
+  height: 0.5em;
+}
+
+.hamster__nose {
+  background: hsl(0,90%,75%);
+  border-radius: 35% 65% 85% 15% / 70% 50% 50% 30%;
+  top: 0.75em;
+  left: 0;
+  width: 0.2em;
+  height: 0.25em;
+}
+
+.hamster__body {
+  animation: hamsterBody var(--dur) ease-in-out infinite;
+  background: hsl(30,90%,90%);
+  border-radius: 50% 30% 50% 30% / 15% 60% 40% 40%;
+  box-shadow: 0.1em 0.75em 0 hsl(30,90%,55%) inset,
+    0.15em -0.5em 0 hsl(30,90%,80%) inset;
+  top: 0.25em;
+  left: 2em;
+  width: 4.5em;
+  height: 3em;
+  transform-origin: 17% 50%;
+  transform-style: preserve-3d;
+}
+
+.hamster__limb--fr,
+.hamster__limb--fl {
+  clip-path: polygon(0 0,100% 0,70% 80%,60% 100%,0% 100%,40% 80%);
+  top: 2em;
+  left: 0.5em;
+  width: 1em;
+  height: 1.5em;
+  transform-origin: 50% 0;
+}
+
+.hamster__limb--fr {
+  animation: hamsterFRLimb var(--dur) linear infinite;
+  background: linear-gradient(hsl(30,90%,80%) 80%,hsl(0,90%,75%) 80%);
+  transform: rotate(15deg) translateZ(-1px);
+}
+
+.hamster__limb--fl {
+  animation: hamsterFLLimb var(--dur) linear infinite;
+  background: linear-gradient(hsl(30,90%,90%) 80%,hsl(0,90%,85%) 80%);
+  transform: rotate(15deg);
+}
+
+.hamster__limb--br,
+.hamster__limb--bl {
+  border-radius: 0.75em 0.75em 0 0;
+  clip-path: polygon(0 0,100% 0,100% 30%,70% 90%,70% 100%,30% 100%,40% 90%,0% 30%);
+  top: 1em;
+  left: 2.8em;
+  width: 1.5em;
+  height: 2.5em;
+  transform-origin: 50% 30%;
+}
+
+.hamster__limb--br {
+  animation: hamsterBRLimb var(--dur) linear infinite;
+  background: linear-gradient(hsl(30,90%,80%) 90%,hsl(0,90%,75%) 90%);
+  transform: rotate(-25deg) translateZ(-1px);
+}
+
+.hamster__limb--bl {
+  animation: hamsterBLLimb var(--dur) linear infinite;
+  background: linear-gradient(hsl(30,90%,90%) 90%,hsl(0,90%,85%) 90%);
+  transform: rotate(-25deg);
+}
+
+.hamster__tail {
+  animation: hamsterTail var(--dur) linear infinite;
+  background: hsl(0,90%,85%);
+  border-radius: 0.25em 50% 50% 0.25em;
+  box-shadow: 0 -0.2em 0 hsl(0,90%,75%) inset;
+  top: 1.5em;
+  right: -0.5em;
+  width: 1em;
+  height: 0.5em;
+  transform: rotate(30deg) translateZ(-1px);
+  transform-origin: 0.25em 0.25em;
+}
+
+.spoke {
+  animation: spoke var(--dur) linear infinite;
+  background: radial-gradient(100% 100% at center,hsl(0,0%,60%) 4.8%,hsla(0,0%,60%,0) 5%),
+    linear-gradient(hsla(0,0%,55%,0) 46.9%,hsl(0,0%,65%) 47% 52.9%,hsla(0,0%,65%,0) 53%) 50% 50% / 99% 99% no-repeat;
+}
+
+/* Animations */
+@keyframes hamster {
+  from, to { transform: rotate(4deg) translate(-0.8em,1.85em); }
+  50% { transform: rotate(0) translate(-0.8em,1.85em); }
+}
+@keyframes hamsterHead {
+  from, 25%, 50%, 75%, to { transform: rotate(0); }
+  12.5%, 37.5%, 62.5%, 87.5% { transform: rotate(8deg); }
+}
+@keyframes hamsterEye {
+  from, 90%, to { transform: scaleY(1); }
+  95% { transform: scaleY(0); }
+}
+@keyframes hamsterEar {
+  from, 25%, 50%, 75%, to { transform: rotate(0); }
+  12.5%, 37.5%, 62.5%, 87.5% { transform: rotate(12deg); }
+}
+@keyframes hamsterBody {
+  from, 25%, 50%, 75%, to { transform: rotate(0); }
+  12.5%, 37.5%, 62.5%, 87.5% { transform: rotate(-2deg); }
+}
+@keyframes hamsterFRLimb {
+  from, 25%, 50%, 75%, to { transform: rotate(50deg) translateZ(-1px); }
+  12.5%, 37.5%, 62.5%, 87.5% { transform: rotate(-30deg) translateZ(-1px); }
+}
+@keyframes hamsterFLLimb {
+  from, 25%, 50%, 75%, to { transform: rotate(-30deg); }
+  12.5%, 37.5%, 62.5%, 87.5% { transform: rotate(50deg); }
+}
+@keyframes hamsterBRLimb {
+  from, 25%, 50%, 75%, to { transform: rotate(-60deg) translateZ(-1px); }
+  12.5%, 37.5%, 62.5%, 87.5% { transform: rotate(20deg) translateZ(-1px); }
+}
+@keyframes hamsterBLLimb {
+  from, 25%, 50%, 75%, to { transform: rotate(20deg); }
+  12.5%, 37.5%, 62.5%, 87.5% { transform: rotate(-60deg); }
+}
+@keyframes hamsterTail {
+  from, 25%, 50%, 75%, to { transform: rotate(30deg) translateZ(-1px); }
+  12.5%, 37.5%, 62.5%, 87.5% { transform: rotate(10deg) translateZ(-1px); }
+}
+@keyframes spoke {
+  from { transform: rotate(0); }
+  to { transform: rotate(-1turn); }
+}
+.logout-fancy-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all .3s ease;
+  box-shadow: 0 6px 16px rgba(255, 65, 65, 0.28);
+  background-color: rgb(255, 65, 65);
+}
+
+.logout-fancy-sign {
+  width: 100%;
+  height: 100%;
+  transition: all .3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.logout-fancy-sign svg {
+  width: 17px;
+}
+
+.logout-fancy-sign svg path {
+  fill: white;
+}
+
+.logout-fancy-text {
+  position: absolute;
+  right: 14px;
+  opacity: 0;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: all .3s ease;
+  pointer-events: none;
+}
+
+.logout-fancy-btn:hover {
+  width: 118px;
+  min-width: 118px;
+  flex: 0 0 118px;
+  border-radius: 24px;
+  justify-content: flex-start;
+}
+
+.logout-fancy-btn:hover .logout-fancy-sign {
+  width: 42px;
+}
+
+.logout-fancy-btn:hover .logout-fancy-text {
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .logout-fancy-btn,
+  .logout-fancy-btn:hover {
+    width: 42px !important;
+    height: 42px !important;
+    flex: 0 0 42px !important;
+    border-radius: 50% !important;
+  }
+.logout-fancy-text,
+  .logout-fancy-btn:hover .logout-fancy-text {
+    display: none !important;
+  }
+
+  .logout-fancy-sign,
+  .logout-fancy-btn:hover .logout-fancy-sign {
+    width: 100% !important;
+    padding: 0 !important;
+  }
+}
+.logout-fancy-btn:active {
+  transform: translate(2px, 2px);
+}
+.change-pass-fancy-btn {
+  display: flex;
+  align-items: center;
+  font-family: inherit;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 0.75em 1.15em 0.75em 0.9em;
+  color: white;
+  background: linear-gradient(to right, #0f0c29, #302b63, #24243e);
+  border: none;
+  letter-spacing: 0.03em;
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgba(36, 36, 62, 0.28);
+}
+
+.change-pass-fancy-btn svg {
+  margin-right: 6px;
+  transform: rotate(30deg);
+  transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+  flex-shrink: 0;
+}
+
+.change-pass-fancy-btn span {
+  transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+  white-space: nowrap;
+}
+
+.change-pass-fancy-btn:hover svg {
+  transform: translateX(5px) rotate(90deg);
+}
+
+.change-pass-fancy-btn:hover span {
+  transform: translateX(7px);
+}
+/* Hiệu ứng riêng cho nút Chấm công / Báo cáo tháng */
+.nav-btn.nav-fx {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  background: #183153;
+  font-family: "Montserrat", sans-serif;
+  box-shadow: 0px 6px 24px 0px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  cursor: pointer;
+  border: none;
+  min-width: 170px;
+  padding: 0;
+}
+
+.nav-btn.nav-fx::after {
+  content: "";
+  width: 0%;
+  height: 100%;
+  background: #ffd401;
+  position: absolute;
+  transition: all 0.4s ease-in-out;
+  right: 0;
+  top: 0;
+}
+
+.nav-btn.nav-fx:hover::after {
+  right: auto;
+  left: 0;
+  width: 100%;
+}
+
+.nav-btn.nav-fx span {
+  text-align: center;
+  text-decoration: none;
+  width: 100%;
+  padding: 14px 20px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  z-index: 2;
+  transition: all 0.3s ease-in-out;
+  position: relative;
+}
+
+.nav-btn.nav-fx:hover span {
+  color: #183153;
+  animation: navScaleUp 0.3s ease-in-out;
+}
+
+.nav-btn.nav-fx.active {
+  background: #183153;
+}
+
+.nav-btn.nav-fx.active span {
+  color: #fff;
+}
+
+@keyframes navScaleUp {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+/* ===== Header gọn lại như bản gốc ===== */
+.app-header {
+  background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+  margin: -15px -15px 0 -15px;
+  padding: 14px 16px 26px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.app-header h3,
+#acc-display {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1.2;
+}
+
+.app-header > div:last-child {
+  display: flex;
+  align-items: center;
+  gap: 10px !important;
+}
+
+/* ===== Nút đổi mật khẩu gọn hơn ===== */
+.change-pass-fancy-btn {
+  height: 46px;
+  padding: 0 16px 0 14px;
+  border-radius: 16px;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 6px 16px rgba(20, 20, 50, 0.22);
+}
+
+.change-pass-fancy-btn svg {
+  width: 20px;
+  height: 20px;
+  margin-right: 7px;
+}
+
+.change-pass-fancy-btn span {
+  white-space: nowrap;
+  font-size: 14px;
+}
+
+/* ===== Nút logout cân đối lại ===== */
+@media (max-width: 520px) {
+  .logout-fancy-btn {
+    width: 42px;
+    height: 42px;
+    flex-basis: 42px;
+  }
+
+  .logout-fancy-btn:hover {
+    width: 42px !important;
+  }
+
+  .main-nav {
+    top: 70px;
+    padding: 0 14px 12px;
+  }
+}
+.logout-fancy-btn:hover .logout-fancy-sign {
+  padding-left: 14px;
+}
+
+.logout-fancy-text {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* ===== Khối nav dưới header mềm hơn ===== */
+.main-nav {
+  display: flex;
+  gap: 0;
+  background: #ffffff;
+  margin: 0 -15px 18px -15px;
+  padding: 0;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  position: sticky;
+  top: 74px;
+  z-index: 99;
+  overflow: hidden;
+}
+/* ===== Nút tab giống bản gốc hơn ===== */
+.nav-btn.nav-fx {
+  flex: 1;
+  min-width: 0;
+  height: 44px;
+  border-radius: 14px;
+  background: #173761;
+  box-shadow: 0 6px 16px rgba(23, 55, 97, 0.18);
+}
+
+.nav-btn.nav-fx + .nav-btn.nav-fx {
+  margin-left: 0;
+}
+
+.nav-btn.nav-fx span {
+  padding: 0 14px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.nav-btn.nav-fx.active {
+  background: #173761;
+}
+
+.nav-btn.nav-fx:hover span {
+  color: #173761;
+}
+
+/* ===== Responsive mobile đẹp hơn ===== */
+@media (max-width: 520px) {
+  .app-header {
+    padding: 12px 14px 24px 14px;
+  }
+
+  #acc-display {
+    font-size: 14px;
+    max-width: 48%;
+  }
+
+  .change-pass-fancy-btn {
+    height: 42px;
+    padding: 0 12px;
+    border-radius: 14px;
+  }
+
+  .change-pass-fancy-btn span {
+    font-size: 13px;
+  }
+
+  .logout-fancy-btn {
+    width: 42px;
+    height: 42px;
+    flex-basis: 42px;
+  }
+
+  .logout-fancy-btn:hover {
+  width: 42px !important;
+}
+
+  .main-nav {
+    top: 70px;
+    padding: 0 14px 12px;
+  }
+
+  .nav-btn.nav-fx {
+    height: 42px;
+    border-radius: 12px;
+  }
+
+  .nav-btn.nav-fx span {
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    padding: 0 10px;
+  }
+}
+
+
+    </style>
+</head>
+<body>
+  <div class="bg-gradient-grid"></div>
+
+  <div class="container">
+    <div id="login-ui" class="login-wrap">
+  <form class="form" onsubmit="event.preventDefault(); login();">
+    <span class="heading">ĐĂNG NHẬP</span>
+
+    <span class="form-label">User</span>
+    <input
+      id="user"
+      placeholder="User"
+      type="text"
+      class="input"
+      onkeydown="if(event.key === 'Enter') login()"
+    />
+
+    <span class="form-label">Password</span>
+    <input
+      id="pass"
+      placeholder="Enter Password"
+      type="password"
+      class="input"
+      onkeydown="if(event.key === 'Enter') login()"
+    />
+
+    <span class="forgot"><a href="javascript:void(0)">forgot password?</a></span>
+
+    <button id="login-btn" type="submit">VÀO HỆ THỐNG</button>
+  </form>
+</div>
+
+    <div id="loading" style="text-align: center; padding: 40px 20px; color: var(--primary); font-weight: bold;">
+        Đang đồng bộ máy chủ...
+    </div>
+
+    <div class="app-header" id="app-header">
+    <h3 id="acc-display">👤 ...</h3>
+    <div style="display:flex; gap:8px;">
+        <button class="change-pass-fancy-btn" onclick="openChangePassword()" title="Đổi mật khẩu">
+  <svg
+    height="24"
+    width="24"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M0 0h24v24H0z" fill="none"></path>
+    <path
+      d="M5 13c0-5.088 2.903-9.436 7-11.182C16.097 3.564 19 7.912 19 13c0 .823-.076 1.626-.22 2.403l1.94 1.832a.5.5 0 0 1 .095.603l-2.495 4.575a.5.5 0 0 1-.793.114l-2.234-2.234a1 1 0 0 0-.707-.293H9.414a1 1 0 0 0-.707.293l-2.234 2.234a.5.5 0 0 1-.793-.114l-2.495-4.575a.5.5 0 0 1 .095-.603l1.94-1.832C5.077 14.626 5 13.823 5 13zm1.476 6.696l.817-.817A3 3 0 0 1 9.414 18h5.172a3 3 0 0 1 2.121.879l.817.817.982-1.8-1.1-1.04a2 2 0 0 1-.593-1.82c.124-.664.187-1.345.187-2.036 0-3.87-1.995-7.3-5-8.96C8.995 5.7 7 9.13 7 13c0 .691.063 1.372.187 2.037a2 2 0 0 1-.593 1.82l-1.1 1.039.982 1.8zM12 13a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"
+      fill="currentColor"
+    ></path>
+  </svg>
+  <span>Đổi mật khẩu</span>
+</button>
+        <button class="logout-fancy-btn" onclick="location.reload()" title="Đăng xuất">
+  <div class="logout-fancy-sign">
+    <svg viewBox="0 0 512 512">
+      <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path>
+    </svg>
+  </div>
+  <div class="logout-fancy-text">Logout</div>
+</button>
+    </div>
+</div>
+
+    <div id="main-ui">
+        <div class="main-nav">
+            <button id="nav-chamcong" class="nav-btn nav-fx active" onclick="switchNav('chamcong')">
+  <span>CHẤM CÔNG</span>
+</button>
+<button id="nav-thongke" class="nav-btn nav-fx" onclick="switchNav('thongke')">
+  <span>BÁO CÁO THÁNG</span>
+</button>
+        </div>
+
+        <div id="chamcong-view">
+            <div class="tab-container">
+                <button class="tab-btn active" id="btn-chua" onclick="switchTab('chua')">CHƯA CHẤM (0)</button>
+                <button class="tab-btn" id="btn-da" onclick="switchTab('da')">ĐÃ LƯU (0)</button>
+            </div>
+
+            <div class="filter-container">
+                <input type="text" id="search-input" class="search-input" placeholder="🔍 Tìm nhanh Tên hoặc Số thẻ..." oninput="filterData()">
+                <select id="shift-filter" class="shift-select" onchange="filterData()">
+                    <option value="ALL">📋 Hiển thị Tất cả các Ca</option>
+                </select>
+            </div>
+
+            <div id="list-chua-cham"></div>
+            <div id="list-da-cham"></div>
+            <button id="save-btn" class="btn btn-save" onclick="saveWorkerData()">CHẤM CÔNG (LƯU)</button>
+        </div>
+
+        <div id="thongke-view">
+            <h4 style="color:var(--text-muted); margin-top:0;">DỮ LIỆU CÔNG THÁNG NÀY</h4>
+            <input type="text" id="search-tk" class="search-input" style="margin-bottom: 15px !important;" placeholder="🔍 Tìm nhân viên..." oninput="renderThongKe()">
+            <div id="thongke-list"></div>
+        </div>
+    </div>
+
+    <div id="admin-ui">
+        <div style="background:white; padding:15px; border-radius:12px; margin-bottom:20px; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
+            <h4 style="margin-top:0; color:var(--primary);">Thêm Tài Khoản</h4>
+            <input type="text" id="new-user" placeholder="Tên tài khoản (Ví dụ: LAN)">
+            <input type="text" id="new-pass" placeholder="Mật khẩu">
+            <select id="new-role" style="width:100%; padding:14px; margin-bottom:10px; border-radius:12px; border:1px solid #ddd; font-size:16px;">
+                <option value="USER">Chuyền Trưởng (USER)</option>
+                <option value="ADMIN">Quản Trị Viên (ADMIN)</option>
+            </select>
+            <button class="btn btn-blue" onclick="addAccount()">+ THÊM</button>
+        </div>
+        <h4 style="color:var(--text-muted); margin-bottom:10px;">DANH SÁCH</h4>
+        <div id="admin-user-list"></div>
+        <button class="btn btn-save" onclick="saveAdminData()">💾 LƯU THAY ĐỔI</button>
+    </div>
+</div>
+<div id="change-pass-modal" class="modal-overlay" onclick="if(event.target === this) closeChangePassword()">
+  <form class="change-pass-form" onsubmit="event.preventDefault(); changePassword();">
+    <span class="change-pass-heading">Đổi mật khẩu</span>
+
+    <span class="change-pass-label">Mật khẩu cũ</span>
+    <input type="password" id="old-pass" class="change-pass-input" placeholder="Nhập mật khẩu cũ" />
+
+    <span class="change-pass-label">Mật khẩu mới</span>
+    <input type="password" id="new-pass-change" class="change-pass-input" placeholder="Nhập mật khẩu mới" />
+
+    <span class="change-pass-label">Nhập lại mật khẩu mới</span>
+    <input type="password" id="confirm-pass-change" class="change-pass-input" placeholder="Nhập lại mật khẩu mới" />
+
+    <div class="change-pass-actions">
+      <button type="button" class="change-pass-cancel" onclick="closeChangePassword()">Hủy</button>
+      <button type="submit" class="change-pass-btn" id="change-pass-btn">Đổi</button>
+    </div>
+  </form>
+</div><script>
+    // DÁN LẠI LINK APP SCRIPT MỚI NHẤT VÀO ĐÂY:
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxMD5m75ScvyBrI9gWVnHch6ul2TyDic_3Dh5MSxFDdcf-5VCeLpdSALjM91Uq4Jrk/exec"; 
+    
+    let currentUser = "";
+    let serverData = {}; 
+    let accountList = []; 
+    let currentShift = "ALL"; 
+    let currentSearch = ""; 
+    let loginLoading = false;
+    let initialDataPromise = null;
+
+    const fullTimeSlots = [];
+    for(let h=0; h<24; h++) {
+        let hr = h < 10 ? "0"+h : h;
+        fullTimeSlots.push(hr + ":00");
+        fullTimeSlots.push(hr + ":30");
+    }
+
+    function loadServerData() {
+        if (serverData.taikhoan && serverData.congnhan && serverData.thongke) {
+            return Promise.resolve(serverData);
+        }
+
+        if (initialDataPromise) {
+            return initialDataPromise;
+        }
+
+        initialDataPromise = fetch(SCRIPT_URL)
+            .then(res => res.json())
+            .then(data => {
+                serverData = data || {};
+                accountList = Array.isArray(serverData.taikhoan) ? serverData.taikhoan : [];
+                return serverData;
+            })
+            .catch(err => {
+                initialDataPromise = null;
+                throw err;
+            });
+
+        return initialDataPromise;
+    }
+
+    window.onload = function() {
+        loadServerData().catch(e => console.log("Lỗi tải ngầm", e));
+    };
+
+    async function login() {
+    const u = document.getElementById('user').value.trim().toUpperCase();
+    const p = document.getElementById('pass').value.trim();
+    const btn = document.getElementById('login-btn');
+
+    if (!u || !p) return alert("Vui lòng nhập tài khoản và mật khẩu!");
+
+    btn.disabled = true;
+    btn.innerText = "ĐANG VÀO HỆ THỐNG...";
+    showLoginLoader();
+
+    try {
+        if (accountList.length === 0) {
+            await loadServerData();
+        }
+
+        const foundUser = accountList.find(acc =>
+            acc[0]?.toString().toUpperCase() === u &&
+            acc[1]?.toString() === p
+        );
+
+        if (!foundUser) {
+            hideLoginLoader();
+            btn.disabled = false;
+            btn.innerText = "VÀO HỆ THỐNG";
+            return alert("Sai tài khoản hoặc mật khẩu!");
+        }
+
+        currentUser = u;
+        currentPass = p;
+        currentRole = foundUser[2];
+
+        document.getElementById("acc-display").innerText = `👤 ${u} (${currentRole})`;
+        document.getElementById("login-ui").style.display = "none";
+        document.getElementById("app-header").style.display = "flex";
+        document.getElementById("loading").style.display = "block";
+
+        setTimeout(() => {
+            try {
+                renderMainMenu();
+                document.getElementById("loading").style.display = "none";
+            } catch (err) {
+                console.error("Lỗi renderMainMenu:", err);
+                alert("Đăng nhập thành công nhưng lỗi khi tải giao diện!");
+            } finally {
+                hideLoginLoader();
+                btn.disabled = false;
+                btn.innerText = "VÀO HỆ THỐNG";
+            }
+        }, 700);
+
+    } catch (err) {
+        console.error("Lỗi login:", err);
+        hideLoginLoader();
+        btn.disabled = false;
+        btn.innerText = "VÀO HỆ THỐNG";
+        alert("Có lỗi khi đăng nhập!");
+    }
+}
+function openChangePassword() {
+    document.getElementById('change-pass-modal').classList.add('show');
+    document.getElementById('old-pass').value = '';
+    document.getElementById('new-pass-change').value = '';
+    document.getElementById('confirm-pass-change').value = '';
+}
+
+function closeChangePassword() {
+    document.getElementById('change-pass-modal').classList.remove('show');
+}
+
+async function changePassword() {
+    const oldPass = document.getElementById('old-pass').value.trim();
+    const newPass = document.getElementById('new-pass-change').value.trim();
+    const confirmPass = document.getElementById('confirm-pass-change').value.trim();
+    const btn = document.getElementById('change-pass-btn');
+
+    if (!oldPass || !newPass || !confirmPass) {
+        return alert("Vui lòng nhập đầy đủ thông tin!");
+    }
+
+    if (newPass !== confirmPass) {
+        return alert("Mật khẩu mới nhập lại không khớp!");
+    }
+
+    if (newPass.length < 4) {
+        return alert("Mật khẩu mới phải từ 4 ký tự trở lên!");
+    }
+
+    btn.disabled = true;
+    btn.innerText = "Đang đổi...";
+
+    try {
+        const res = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify({
+                action: "doi_mat_khau",
+                user: currentUser,
+                oldPass: oldPass,
+                newPass: newPass
+            })
+        });
+
+        const text = await res.text();
+
+        if (text.toLowerCase().includes("thành công")) {
+            alert("Đổi mật khẩu thành công!");
+            closeChangePassword();
+
+            const acc = accountList.find(a => a[0] && a[0].toString().toUpperCase() === currentUser);
+            if (acc) acc[1] = newPass;
+        } else {
+            alert(text);
+        }
+    } catch (e) {
+        alert("Lỗi kết nối khi đổi mật khẩu!");
+    } finally {
+        btn.disabled = false;
+        btn.innerText = "Đổi";
+    }
+}
+    function switchNav(viewName) {
+        document.getElementById('nav-chamcong').classList.remove('active');
+        document.getElementById('nav-thongke').classList.remove('active');
+        document.getElementById('nav-' + viewName).classList.add('active');
+
+        if(viewName === 'chamcong') {
+            document.getElementById('chamcong-view').style.display = 'block';
+            document.getElementById('thongke-view').style.display = 'none';
+        } else {
+            document.getElementById('chamcong-view').style.display = 'none';
+            document.getElementById('thongke-view').style.display = 'block';
+        }
+    }
+function showLoginLoader() {
+    document.getElementById('login-loading-overlay').classList.add('show');
+}
+
+function hideLoginLoader() {
+    document.getElementById('login-loading-overlay').classList.remove('show');
+}
+    // =====================================
+    // RENDER THỐNG KÊ CÓ GIAO DIỆN 5 Ô CÂN ĐỐI
+    // =====================================
+function renderMainMenu() {
+    document.getElementById('loading').style.display = 'none';
+
+    if (currentRole === 'ADMIN') {
+        document.getElementById('main-ui').style.display = 'none';
+        document.getElementById('admin-ui').style.display = 'block';
+        renderAdminList();
+        return;
+    }
+
+    document.getElementById('admin-ui').style.display = 'none';
+    document.getElementById('main-ui').style.display = 'block';
+
+    populateShiftFilter();
+    switchNav('chamcong');
+    switchTab('chua');
+    renderWorkerList();
+    renderThongKe();
+}    
+function renderThongKe() {
+        const tkView = document.getElementById('thongke-list');
+        const searchVal = document.getElementById('search-tk').value.toUpperCase().trim();
+        
+        let myData = (serverData.thongke || []).filter(r => r.acc === currentUser);
+
+        if(myData.length === 0) {
+            tkView.innerHTML = `<div class="worker-card" style="text-align:center;">Tháng này chưa có dữ liệu chấm công nào!</div>`;
+            return;
+        }
+
+        const shiftMap = {};
+        serverData.congnhan.forEach(w => {
+            shiftMap[w[0]] = w[5] ? w[5].toString().toUpperCase().trim() : "F";
+        });
+
+        const grouped = {};
+        myData.forEach(row => {
+            if(!grouped[row.id]) {
+                grouped[row.id] = { ten: row.ten, details: [], totalTCT: 0, normalDays: 0, sunDays: 0, normalOT: 0, sundayOT: 0 };
+            }
+            
+            let shift = shiftMap[row.id] || "F";
+            let lenca = row.lenca ? row.lenca.toString().replace(/\D/g, '') : "";
+            let xuongca = row.xuongca ? row.xuongca.toString().replace(/\D/g, '') : "";
+            let ot = 0; 
+            
+            // THUẬT TOÁN TÍNH TĂNG CA CHO 3 CA
+            let hL = lenca.length >= 4 ? parseInt(lenca.substring(0,2)) : null;
+            let mL = lenca.length >= 4 ? parseInt(lenca.substring(2,4)) : null;
+            let minL = hL !== null ? (hL * 60 + mL) : null; 
+
+            let hX = xuongca.length >= 4 ? parseInt(xuongca.substring(0,2)) : null;
+            let mX = xuongca.length >= 4 ? parseInt(xuongca.substring(2,4)) : null;
+            let minX = hX !== null ? (hX * 60 + mX) : null; 
+
+            if (shift === "F") {
+                if (minL !== null && minL < 450 && minL > 300) ot += (450 - minL) / 60; 
+                if (minX !== null && minX > 990) ot += (minX - 990) / 60; 
+            } else if (shift === "C") {
+                if (minL !== null && minL < 450 && minL > 300) ot += (450 - minL) / 60; 
+                if (minX !== null && minX > 930) ot += (minX - 930) / 60; 
+            } else if (shift === "S") {
+                if (minL !== null && minL < 1320 && minL > 720) ot += (1320 - minL) / 60; 
+                if (minX !== null && minX > 360 && minX < 720) ot += (minX - 360) / 60; 
+            }
+
+            if (row.isSunday) {
+                grouped[row.id].sunDays++;
+                grouped[row.id].sundayOT += ot; 
+            } else {
+                grouped[row.id].normalDays++;
+                grouped[row.id].normalOT += ot; 
+            }
+            
+            grouped[row.id].totalTCT += Number(row.tct) || 0; 
+            row.calcOTThisDay = ot; 
+            grouped[row.id].details.push(row);
+        });
+
+        let html = "";
+        for (const [id, worker] of Object.entries(grouped)) {
+            if (searchVal !== "" && !worker.ten.toUpperCase().includes(searchVal) && !id.includes(searchVal)) {
+                continue; 
+            }
+
+            worker.details.sort((a,b) => b.ngay.localeCompare(a.ngay));
+
+            let detailsHtml = worker.details.map(d => `
+                <div class="stat-row" style="${d.isSunday ? 'background:#fffbeb; padding:8px; border-radius:6px;' : 'padding:8px 0;'}">
+                    <b>🗓️ ${d.ngay} ${d.isSunday ? '<span style="color:#d97706">(CN)</span>' : ''}</b>
+                    <span>${displayTime(d.lenca)} ➡️ ${displayTime(d.xuongca)}</span>
+                    <div style="text-align:right">
+                        <div style="color:#15803d; font-size:11px; font-weight:bold">+${d.calcOTThisDay.toFixed(1)}h TC</div>
+                        <div style="color:var(--danger); font-size:11px; font-weight:bold">TCT: ${d.tct || 0}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            html += `
+            <div class="worker-card">
+                <div class="w-name">👤 ${worker.ten}</div>
+                <div class="w-details"><span class="badge">Thẻ: ${id}</span> <span class="badge badge-shift">Ca: ${shiftMap[id]}</span></div>
+                
+                <div style="margin-top:12px; display:flex; flex-wrap:wrap; gap:8px;">
+                    <div style="flex: 1 1 30%; background:var(--primary-light); color:var(--primary); padding:10px 5px; border-radius:10px; text-align:center;">
+                        <div style="font-size:16px; font-weight:bold;">${worker.normalDays}</div><div style="font-size:10px; font-weight:bold;">Ngày Thường</div>
+                    </div>
+                    <div style="flex: 1 1 30%; background:#fef3c7; color:#d97706; padding:10px 5px; border-radius:10px; text-align:center;">
+                        <div style="font-size:16px; font-weight:bold;">${worker.sunDays}</div><div style="font-size:10px; font-weight:bold;">Chủ Nhật</div>
+                    </div>
+                    <div style="flex: 1 1 30%; background:#fee2e2; color:var(--danger); padding:10px 5px; border-radius:10px; text-align:center;">
+                        <div style="font-size:16px; font-weight:bold;">${worker.totalTCT}</div><div style="font-size:10px; font-weight:bold;">TCT</div>
+                    </div>
+                    <div style="flex: 1 1 45%; background:#dcfce7; color:#15803d; padding:10px 5px; border-radius:10px; text-align:center;">
+                        <div style="font-size:16px; font-weight:bold;">${worker.normalOT.toFixed(1)}</div><div style="font-size:10px; font-weight:bold;">TC THƯỜNG (h)</div>
+                    </div>
+                    <div style="flex: 1 1 45%; background:#ffedd5; color:#c2410c; padding:10px 5px; border-radius:10px; text-align:center;">
+                        <div style="font-size:16px; font-weight:bold;">${worker.sundayOT.toFixed(1)}</div><div style="font-size:10px; font-weight:bold;">TC CHỦ NHẬT (h)</div>
+                    </div>
+                </div>
+
+                <details>
+                    <summary>Xem chi tiết từng ngày</summary>
+                    <div style="margin-top:10px; background:#f9fafb; padding:10px; border-radius:8px; border: 1px solid #e5e7eb;">
+                        ${detailsHtml}
+                    </div>
+                </details>
+            </div>`;
+        }
+        tkView.innerHTML = html || `<div class="worker-card" style="text-align:center;">Không tìm thấy nhân viên!</div>`;
+    }
+
+    // =====================================
+    // LOGIC CHẤM CÔNG VÀ LƯU 
+    // =====================================
+    function populateShiftFilter() {
+        const userWorkers = serverData.congnhan.filter(r => r[4] && r[4].toString().toUpperCase().trim() === currentUser);
+        const uniqueShifts = [...new Set(userWorkers.map(r => r[5] ? r[5].toString().trim().toUpperCase() : "").filter(s => s !== ""))].sort();
+        const shiftSelect = document.getElementById('shift-filter');
+        let optionsHtml = `<option value="ALL">📋 Hiển thị Tất cả các Ca</option>`;
+        uniqueShifts.forEach(shift => { optionsHtml += `<option value="${shift}">⚙️ Chỉ xem Ca ${shift}</option>`; });
+        shiftSelect.innerHTML = optionsHtml;
+    }
+
+    function filterData() {
+        currentShift = document.getElementById('shift-filter').value;
+        currentSearch = document.getElementById('search-input').value.toUpperCase().trim();
+        renderWorkerList(); 
+    }
+
+    function switchTab(tabName) {
+        document.getElementById('btn-chua').classList.remove('active');
+        document.getElementById('btn-da').classList.remove('active');
+        document.getElementById('btn-' + tabName).classList.add('active');
+
+        if (tabName === 'chua') {
+            document.getElementById('list-chua-cham').style.display = 'block';
+            document.getElementById('list-da-cham').style.display = 'none';
+            document.getElementById('save-btn').style.display = 'block'; 
+        } else {
+            document.getElementById('list-chua-cham').style.display = 'none';
+            document.getElementById('list-da-cham').style.display = 'block';
+            document.getElementById('save-btn').style.display = 'none'; 
+        }
+    }
+
+    function displayTime(raw) {
+        if (!raw) return "--:--"; 
+        let clean = raw.toString().replace(/\D/g, ''); 
+        if (clean.length >= 4) return clean.substring(0, 2) + ":" + clean.substring(2, 4);
+        return raw;
+    }
+
+    function renderWorkerList() {
+        let filtered = serverData.congnhan.filter(r => r[4] && r[4].toString().toUpperCase().trim() === currentUser);
+        if (currentShift !== "ALL") filtered = filtered.filter(r => r[5] && r[5].toString().toUpperCase().trim() === currentShift);
+        if (currentSearch !== "") {
+            filtered = filtered.filter(r => {
+                const id = r[0] ? r[0].toString().toUpperCase() : "";
+                const name = r[1] ? r[1].toString().toUpperCase() : "";
+                return id.includes(currentSearch) || name.includes(currentSearch);
+            });
+        }
+
+        if (filtered.length === 0) {
+            document.getElementById('list-chua-cham').innerHTML = `<div class="worker-card" style="text-align:center; color:var(--danger)">Không tìm thấy công nhân phù hợp!</div>`;
+            document.getElementById('list-da-cham').innerHTML = `<div class="worker-card" style="text-align:center; color:var(--danger)">Không có dữ liệu!</div>`;
+            document.getElementById('btn-chua').innerText = `CHƯA CHẤM (0)`; document.getElementById('btn-da').innerText = `ĐÃ LƯU (0)`; return;
+        }
+
+        let htmlChua = "", htmlDa = "", countChua = 0, countDa = 0;
+
+        filtered.forEach(w => {
+            const isRecorded = w[w.length - 4], savedLenCa = w[w.length - 3], savedXuongCa = w[w.length - 2], savedTCT = w[w.length - 1];
+
+            if (isRecorded === true) {
+                countDa++;
+                htmlDa += `
+                <div class="worker-card disabled-card">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <div class="w-name">👤 ${w[1]}</div> <span class="status-badge">✓ ĐÃ LƯU</span>
+                    </div>
+                    <div class="w-details"><span class="badge">Thẻ: ${w[0]}</span> <span class="badge badge-shift">Ca: ${w[5]}</span></div>
+                    <div class="time-row">
+                        <div class="time-wrapper"><label>LÊN CA</label><input type="text" class="time-input" disabled value="${displayTime(savedLenCa)}"></div>
+                        <div class="time-wrapper"><label>XUỐNG CA</label><input type="text" class="time-input" disabled value="${displayTime(savedXuongCa)}"></div>
+                        <div class="time-wrapper"><label>TCT</label><input type="text" class="time-input" disabled value="${savedTCT}"></div>
+                    </div>
+                </div>`;
+            } else {
+                countChua++;
+                htmlChua += `
+                <div class="worker-card active-card">
+                    <div class="w-name">👤 ${w[1]}</div>
+                    <div class="w-details"><span class="badge">Thẻ: ${w[0]}</span> <span class="badge">Bậc: ${w[2]}</span> <span class="badge">Chuyền: ${w[3]}</span> <span class="badge badge-shift">Ca: ${w[5]}</span></div>
+                    <div class="time-row">
+                        <div class="time-wrapper">
+                            <label>GIỜ LÊN CA</label>
+                            <input type="text" inputmode="decimal" class="time-input in-lenca" 
+                                onfocus="renderSuggestions(this)" oninput="renderSuggestions(this)" onchange="formatTime(this)"
+                                data-id="${w[0]}" data-name="${w[1]}" data-capbac="${w[2]}" data-chuyen="${w[3]}" placeholder="--:--">
+                        </div>
+                        <div class="time-wrapper">
+                            <label>GIỜ XUỐNG CA</label>
+                            <input type="text" inputmode="decimal" class="time-input in-xuongca" 
+                                onfocus="renderSuggestions(this)" oninput="renderSuggestions(this)" onchange="formatTime(this)" placeholder="--:--">
+                        </div>
+                        <div class="time-wrapper">
+                            <label>TCT</label>
+                            <input type="number" step="0.5" inputmode="decimal" class="time-input in-tct" placeholder="">
+                        </div>
+                    </div>
+                </div>`;
+            }
+        });
+
+        document.getElementById('list-chua-cham').innerHTML = htmlChua || `<div class="worker-card" style="text-align:center; color:var(--success); font-weight:bold;">Tất cả đã chấm xong!</div>`;
+        document.getElementById('list-da-cham').innerHTML = htmlDa || `<div class="worker-card" style="text-align:center;">Chưa có dữ liệu.</div>`;
+        document.getElementById('btn-chua').innerText = `CHƯA CHẤM (${countChua})`; document.getElementById('btn-da').innerText = `ĐÃ LƯU (${countDa})`;
+    }
+
+    function renderSuggestions(inputNode) {
+    closeAllSuggestions();
+
+    const wrapper = inputNode.parentNode;
+    let val = inputNode.value.trim().replace(/\D/g, '');
+    let slotsToShow = fullTimeSlots;
+
+    if (val !== "") {
+        slotsToShow = fullTimeSlots.filter(t =>
+            parseInt(t.split(':')[0]).toString() == val ||
+            t.replace(':', '').includes(val)
+        );
+    }
+
+    if (slotsToShow.length === 0) return;
+
+    const dropBox = document.createElement("div");
+    dropBox.className = "suggestions-box";
+    dropBox.style.display = "grid";
+
+    slotsToShow.forEach(time => {
+        const item = document.createElement("div");
+        item.className = "suggestion-item";
+        item.innerText = time;
+
+        if (inputNode.value === time) {
+            item.classList.add("active-suggestion");
+        }
+
+        item.onmousedown = function(e) {
+            e.preventDefault();
+            inputNode.value = time;
+            closeAllSuggestions();
+            inputNode.blur();
+        };
+
+        dropBox.appendChild(item);
+    });
+
+    wrapper.appendChild(dropBox);
+
+    if (val === "") {
+        const index = fullTimeSlots.indexOf("07:00");
+        if (index >= 0) {
+            setTimeout(() => {
+                const targetRow = Math.floor(index / 2);
+                dropBox.scrollTop = targetRow * 48;
+            }, 10);
+        }
+    }
+}
+
+    function closeAllSuggestions() { document.querySelectorAll('.suggestions-box').forEach(box => box.remove()); }
+    document.addEventListener("mousedown", function(e) { if (!e.target.classList.contains("time-input") && !e.target.classList.contains("suggestion-item")) closeAllSuggestions(); });
+
+    function formatTime(input) {
+        let val = input.value.trim().replace(',', '.'); if (!val) return;
+        if (/^\d{3,4}$/.test(val)) { input.value = val.padStart(4, '0').substring(0, 2) + ":" + val.padStart(4, '0').substring(2, 4); return; }
+        if (/^\d{1,2}$/.test(val)) input.value = (parseInt(val) < 10 ? "0"+parseInt(val) : parseInt(val)) + ":00";
+        else if (/^\d{1,2}\.5$/.test(val)) input.value = (parseInt(val.split('.')[0]) < 10 ? "0"+parseInt(val.split('.')[0]) : parseInt(val.split('.')[0])) + ":30";
+    }
+
+    function timeTo6Digits(timeStr) {
+        if (!timeStr) return "";
+        let clean = timeStr.replace(/\D/g, ''); 
+        if (clean.length === 3) clean = "0" + clean; 
+        if (clean.length === 4) return "'" + clean + "00";
+        return "'" + clean;
+    }
+
+    // BẮT BỘ LỖI KHI BẤM LƯU & CẬP NHẬT NGẦM
+    async function saveWorkerData() {
+        const btn = document.getElementById('save-btn'); const cards = document.querySelectorAll('.active-card');
+        const payloadData = []; let hasError = false; let errorMsg = "";
+
+        document.querySelectorAll('.time-input').forEach(input => input.style.border = "none");
+
+        cards.forEach(c => {
+            const lencaIn = c.querySelector('.in-lenca'), xuongcaIn = c.querySelector('.in-xuongca');
+            const lenca = lencaIn.value.trim(), xuongca = xuongcaIn.value.trim(), tct = c.querySelector('.in-tct').value.trim(); 
+
+            if (lenca !== "" || xuongca !== "" || tct !== "") {
+                if (lenca === "" || xuongca === "") {
+                    hasError = true;
+                    if (errorMsg === "") errorMsg = `Vui lòng nhập đầy đủ LÊN CA và XUỐNG CA cho:\n👤 ${lencaIn.dataset.name}`;
+                    if (lenca === "") lencaIn.style.border = "2px solid var(--danger)";
+                    if (xuongca === "") xuongcaIn.style.border = "2px solid var(--danger)";
+                } else {
+                    payloadData.push({ id: lencaIn.dataset.id, name: lencaIn.dataset.name, capbac: lencaIn.dataset.capbac, chuyen: lencaIn.dataset.chuyen, acc: currentUser, lenca: timeTo6Digits(lenca), xuongca: timeTo6Digits(xuongca), tct: tct });
+                }
+            }
+        });
+
+        if (hasError) return alert(errorMsg + "\n\n(Các ô bị thiếu đã khoanh đỏ 🔴)");
+        if (payloadData.length === 0) return alert("Không có dữ liệu mới!");
+        
+        btn.disabled = true; btn.innerText = "Đang lưu...";
+        try {
+            await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: "chamcong", data: payloadData }) });
+            alert("Đã chấm công thành công!"); btn.disabled = false; btn.innerText = "CHẤM CÔNG (LƯU)"; reloadData(); 
+        } catch (e) { alert("Lỗi kết nối!"); btn.disabled = false; btn.innerText = "CHẤM CÔNG (LƯU)"; }
+    }
+
+    async function reloadData() {
+        document.getElementById('main-ui').style.display = 'none'; document.getElementById('loading').style.display = 'block';
+        try {
+            const res = await fetch(SCRIPT_URL); serverData = await res.json();
+            accountList = Array.isArray(serverData.taikhoan) ? serverData.taikhoan : accountList;
+            initialDataPromise = Promise.resolve(serverData);
+            document.getElementById('loading').style.display = 'none'; document.getElementById('main-ui').style.display = 'block';
+            renderWorkerList(); renderThongKe(); 
+        } catch (e) { alert("Lỗi tải dữ liệu!"); }
+    }
+
+    // =====================================
+    // QUẢN LÝ ADMIN
+    // =====================================
+    function renderAdminList() {
+        document.getElementById('admin-user-list').innerHTML = accountList.map((acc, i) => !acc[0] ? "" : `
+            <div class="admin-card">
+                <div><div style="font-size:16px; font-weight:bold; color:var(--text-main)">${acc[0]}</div><div style="font-size:12px; color:var(--text-muted)">Quyền: <b style="color:${acc[2]=='ADMIN'?'var(--danger)':'var(--success)'}">${acc[2]}</b></div></div>
+                <div style="display:flex; gap:8px;"><button class="admin-action-btn btn-edit" onclick="changePass(${i})">Đổi Pass</button><button class="admin-action-btn btn-del" onclick="deleteAccount(${i})">Xóa</button></div>
+            </div>`).join('');
+    }
+    function addAccount() {
+        const u = document.getElementById('new-user').value.toUpperCase().trim(), p = document.getElementById('new-pass').value.trim(), r = document.getElementById('new-role').value;
+        if(u==="" || p==="") return alert("Vui lòng nhập Tên và Mật khẩu!");
+        if(accountList.find(acc => acc[0] && acc[0].toString().toUpperCase() === u)) return alert("Tài khoản đã tồn tại!");
+        accountList.push([u, p, r]); document.getElementById('new-user').value = ""; document.getElementById('new-pass').value = ""; alert("Đã thêm tạm thời! Nhớ bấm LƯU THAY ĐỔI."); renderAdminList();
+    }
+    function deleteAccount(i) { if(confirm(`Xóa tài khoản ${accountList[i][0]}?`)) { accountList.splice(i, 1); renderAdminList(); } }
+    function changePass(i) { const newPass = prompt(`Pass mới cho ${accountList[i][0]}:`); if(newPass && newPass.trim() !== "") { accountList[i][1] = newPass.trim(); alert("Đã đổi pass tạm thời! Nhớ LƯU THAY ĐỔI."); } }
+    async function saveAdminData() {
+        if(!confirm("Xác nhận lưu lên máy chủ?")) return;
+        try { await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: "quanly_taikhoan", data: accountList }) }); alert("Thành công!"); location.reload(); } catch (e) { alert("Lỗi!"); }
+    }
+</script>
+<div id="login-loading-overlay" class="login-loading-overlay" style="display:none;">
+  <div class="login-loading-box">
+    <div aria-label="Orange and tan hamster running in a metal wheel" role="img" class="wheel-and-hamster">
+      <div class="wheel"></div>
+      <div class="hamster">
+        <div class="hamster__body">
+          <div class="hamster__head">
+            <div class="hamster__ear"></div>
+            <div class="hamster__eye"></div>
+            <div class="hamster__nose"></div>
+          </div>
+          <div class="hamster__limb hamster__limb--fr"></div>
+          <div class="hamster__limb hamster__limb--fl"></div>
+          <div class="hamster__limb hamster__limb--br"></div>
+          <div class="hamster__limb hamster__limb--bl"></div>
+          <div class="hamster__tail"></div>
+        </div>
+      </div>
+      <div class="spoke"></div>
+    </div>
+    <div class="login-loading-text">Đang đăng nhập...</div>
+  </div>
+</div>
+<div id="login-loading-overlay" class="login-loading-overlay">
+  <div class="login-loading-box">
+    <div aria-label="Hamster loading" role="img" class="wheel-and-hamster">
+      <div class="wheel"></div>
+      <div class="hamster">
+        <div class="hamster__body">
+          <div class="hamster__head">
+            <div class="hamster__ear"></div>
+            <div class="hamster__eye"></div>
+            <div class="hamster__nose"></div>
+          </div>
+          <div class="hamster__limb hamster__limb--fr"></div>
+          <div class="hamster__limb hamster__limb--fl"></div>
+          <div class="hamster__limb hamster__limb--br"></div>
+          <div class="hamster__limb hamster__limb--bl"></div>
+          <div class="hamster__tail"></div>
+        </div>
+      </div>
+      <div class="spoke"></div>
+    </div>
+    <div class="login-loading-text">Đang đăng nhập...</div>
+  </div>
+</div>
+</body>
+</html>
