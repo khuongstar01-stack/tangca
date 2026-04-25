@@ -1103,16 +1103,12 @@ body {
 
 .time-wrapper .suggestions-box {
   position: absolute !important;
-  top: calc(100% + 6px) !important;
+  top: calc(100% + 8px) !important;
   left: 0 !important;
   width: 100% !important;
+  min-width: 100% !important;
 }
 
-.suggestions-box.mobile-floating-suggestion {
-  position: fixed !important;
-  box-shadow: 0 10px 24px rgba(0,0,0,0.18) !important;
-  z-index: 999999 !important;
-}
 
 .suggestion-item {
   display: flex;
@@ -1160,7 +1156,7 @@ body {
   }
 
   .suggestion-item {
-    min-height: 52px !important;
+    min-height: 60px !important;
     font-size: 24px !important;
     border-radius: 12px !important;
   }
@@ -1860,27 +1856,9 @@ function renderThongKe() {
   if (slotsToShow.length === 0) return;
 
   const wrapper = inputNode.closest('.time-wrapper');
-  const rect = inputNode.getBoundingClientRect();
-  const isMobile = window.innerWidth <= 768;
-
   const dropBox = document.createElement("div");
-  dropBox.className = "suggestions-box" + (isMobile ? " mobile-floating-suggestion" : "");
-
-  if (isMobile) {
-    const desiredWidth = Math.max(rect.width + 70, 170);
-    const maxWidth = window.innerWidth - 16;
-    const boxWidth = Math.min(desiredWidth, maxWidth);
-
-    let left = rect.left - (boxWidth - rect.width) / 2;
-    left = Math.max(8, Math.min(left, window.innerWidth - boxWidth - 8));
-
-    document.body.appendChild(dropBox);
-    dropBox.style.width = boxWidth + "px";
-    dropBox.style.left = left + "px";
-    dropBox.style.top = (rect.bottom + 6) + "px";
-  } else {
-    wrapper.appendChild(dropBox);
-  }
+  dropBox.className = "suggestions-box";
+  wrapper.appendChild(dropBox);
 
   slotsToShow.forEach(time => {
     const item = document.createElement("div");
@@ -1901,29 +1879,12 @@ function renderThongKe() {
     dropBox.appendChild(item);
   });
 
-  if (isMobile) {
-    const boxHeight = Math.min(dropBox.scrollHeight, 280);
-    const spaceBelow = window.innerHeight - rect.bottom - 8;
-    const spaceAbove = rect.top - 8;
-
-    if (spaceBelow >= boxHeight || spaceBelow >= spaceAbove) {
-      dropBox.style.top = Math.min(rect.bottom + 6, window.innerHeight - boxHeight - 8) + "px";
-    } else {
-      dropBox.style.top = Math.max(8, rect.top - boxHeight - 6) + "px";
-    }
-  }
-
   if (val === "") {
     const index = fullTimeSlots.indexOf("07:00");
     if (index >= 0) {
       setTimeout(() => {
-        if (isMobile) {
-          const itemHeight = 52;
-          dropBox.scrollTop = index * itemHeight;
-        } else {
-          const targetRow = Math.floor(index / 2);
-          dropBox.scrollTop = targetRow * 52;
-        }
+        const itemHeight = window.innerWidth <= 768 ? 64 : 52;
+        dropBox.scrollTop = index * itemHeight;
       }, 10);
     }
   }
