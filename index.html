@@ -2223,6 +2223,13 @@ if (card) card.classList.add('suggestion-layer');
       inputNode.blur();
     };
 
+    item.ontouchstart = function(e) {
+      e.preventDefault();
+      inputNode.value = time;
+      closeAllSuggestions();
+      inputNode.blur();
+    };
+
     dropBox.appendChild(item);
   });
 
@@ -2242,6 +2249,29 @@ function closeAllSuggestions() {
   document.querySelectorAll('.suggestion-layer').forEach(el => el.classList.remove('suggestion-layer'));
   document.body.classList.remove("suggestion-open");
 }
+
+function isInsideSuggestionArea(target) {
+  return !!target.closest('.time-wrapper') || !!target.closest('.suggestions-box');
+}
+
+document.addEventListener('pointerdown', function(e) {
+  if (!isInsideSuggestionArea(e.target)) {
+    closeAllSuggestions();
+  }
+});
+
+document.addEventListener('touchstart', function(e) {
+  if (!isInsideSuggestionArea(e.target)) {
+    closeAllSuggestions();
+  }
+}, { passive: true });
+
+document.addEventListener('focusin', function(e) {
+  if (!isInsideSuggestionArea(e.target)) {
+    closeAllSuggestions();
+  }
+});
+
 if (window.innerWidth > 768) {
   window.addEventListener("scroll", closeAllSuggestions, true);
   window.addEventListener("resize", closeAllSuggestions);
