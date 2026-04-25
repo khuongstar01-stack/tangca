@@ -1290,6 +1290,32 @@ html, body {
   box-sizing: border-box !important;
 }
 
+/* Mobile: tối ưu ô gợi ý giờ */
+@media (max-width: 768px) {
+  .suggestions-box {
+    max-height: 160px !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 14px !important;
+    box-shadow: 0 10px 24px rgba(0,0,0,.16) !important;
+    padding: 8px !important;
+    gap: 8px !important;
+  }
+
+  .suggestion-item {
+    min-height: 44px !important;
+    font-size: 22px !important;
+    border-radius: 12px !important;
+  }
+
+  /* Khi gợi ý mở, đẩy nút lưu mờ đi để tránh bấm nhầm */
+  body.suggestion-open #save-btn {
+    opacity: 0.25;
+    pointer-events: none;
+    transform: translateX(-50%) scale(0.98);
+  }
+}
+
 </style>
 </head>
 <body>
@@ -1862,47 +1888,31 @@ function renderThongKe() {
     function renderSuggestions(inputNode) {
   closeAllSuggestions();
 
-  const val = inputNode.value.trim().replace(/\D/g, '');
+  const wrapper = inputNode.closest('.time-wrapper');
+  if (!wrapper) return;
+
+  let val = inputNode.value.trim().replace(/\D/g, '');
   let slotsToShow = [...fullTimeSlots];
 
   if (val !== "") {
-    const startsWithHour = [];
-    const startsWithRaw = [];
-    const includesRaw = [];
-
-    slotsToShow.forEach(time => {
-      const hourText = String(parseInt(time.split(':')[0], 10));
-      const rawText = time.replace(':', '');
-
-      if (hourText === val || time.startsWith(val + ':')) {
-        startsWithHour.push(time);
-      } else if (rawText.startsWith(val)) {
-        startsWithRaw.push(time);
-      } else if (rawText.includes(val)) {
-        includesRaw.push(time);
-      }
-    });
-
-    slotsToShow = [...startsWithHour, ...startsWithRaw, ...includesRaw];
+    const exactHour = slotsToShow.filter(t => t.startsWith(val.padStart(2, '0') + ":"));
+    const partial = slotsToShow.filter(t =>
+      !t.startsWith(val.padStart(2, '0') + ":") &&
+      (parseInt(t.split(':')[0], 10).toString() === val || t.replace(':', '').includes(val))
+    );
+    slotsToShow = [...exactHour, ...partial];
   }
 
   if (slotsToShow.length === 0) return;
 
-  const wrapper = inputNode.closest('.time-wrapper');
-  if (!wrapper) return;
-
   const dropBox = document.createElement("div");
   dropBox.className = "suggestions-box";
-  wrapper.appendChild(dropBox);
+  dropBox.style.display = "grid";
 
   slotsToShow.forEach(time => {
     const item = document.createElement("div");
     item.className = "suggestion-item";
     item.innerText = time;
-
-    if (inputNode.value === time) {
-      item.classList.add("active-suggestion");
-    }
 
     item.onmousedown = function(e) {
       e.preventDefault();
@@ -1914,19 +1924,39 @@ function renderThongKe() {
     dropBox.appendChild(item);
   });
 
-  const targetTime = val ? slotsToShow[0] : "07:00";
-  const targetIndex = slotsToShow.indexOf(targetTime);
-  if (targetIndex >= 0) {
-    setTimeout(() => {
-      const firstItem = dropBox.querySelector('.suggestion-item');
-      const itemHeight = firstItem ? firstItem.offsetHeight + 10 : (window.innerWidth <= 768 ? 70 : 62);
-      dropBox.scrollTop = Math.max(0, targetIndex * itemHeight - itemHeight);
-    }, 10);
+  wrapper.appendChild(dropBox);
+
+  // Mobile: nếu dưới không đủ chỗ thì mở lên trên
+  const wrapperRect = wrapper.getBoundingClientRect();
+  const viewportHeight = window.innerHeight;
+  const estimatedHeight = Math.min(160, slotsToShow.length * 52);
+  const spaceBelow = viewportHeight - wrapperRect.bottom;
+  const spaceAbove = wrapperRect.top;
+
+  if (window.innerWidth <= 768 && spaceBelow < estimatedHeight && spaceAbove > spaceBelow) {
+    dropBox.style.top = "auto";
+    dropBox.style.bottom = "calc(100% + 6px)";
+  } else {
+    dropBox.style.top = "calc(100% + 6px)";
+    dropBox.style.bottom = "auto";
+  }
+
+  document.body.classList.add("suggestion-open");
+
+  // Nếu ô trống thì tự cuộn về vùng 07:00
+  if (val === "") {
+    const index = slotsToShow.findIndex(t => t === "07:00");
+    if (index >= 0) {
+      setTimeout(() => {
+        dropBox.scrollTop = Math.max(0, index * 52 - 20);
+      }, 10);
+    }
   }
 }
 
 function closeAllSuggestions() {
   document.querySelectorAll('.suggestions-box').forEach(box => box.remove());
+  document.body.classList.remove("suggestion-open");
 }
 
 document.addEventListener("mousedown", function(e) {
