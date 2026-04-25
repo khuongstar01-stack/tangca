@@ -1162,6 +1162,25 @@ body {
   }
 }
     
+.suggestions-box::-webkit-scrollbar {
+  width: 8px;
+}
+
+.suggestions-box::-webkit-scrollbar-track {
+  background: #eef2ff;
+  border-radius: 999px;
+}
+
+.suggestions-box::-webkit-scrollbar-thumb {
+  background: #9db2ff;
+  border-radius: 999px;
+}
+
+.suggestions-box {
+  scrollbar-width: thin;
+  scrollbar-color: #9db2ff #eef2ff;
+}
+
 /* ===== FIX MAIN NAV CHÈN NHAU Ở BÁO CÁO THÁNG ===== */
 #main-ui {
   overflow: visible;
@@ -1818,13 +1837,13 @@ function renderThongKe() {
                         <div class="time-wrapper">
                             <label>GIỜ LÊN CA</label>
                             <input type="text" inputmode="decimal" class="time-input in-lenca" 
-                                onfocus="renderSuggestions(this)" oninput="renderSuggestions(this)" onchange="formatTime(this)"
+                                onfocus="renderSuggestions(this)" onclick="renderSuggestions(this)" oninput="renderSuggestions(this)" onchange="formatTime(this)"
                                 data-id="${w[0]}" data-name="${w[1]}" data-capbac="${w[2]}" data-chuyen="${w[3]}" placeholder="--:--">
                         </div>
                         <div class="time-wrapper">
                             <label>GIỜ XUỐNG CA</label>
                             <input type="text" inputmode="decimal" class="time-input in-xuongca" 
-                                onfocus="renderSuggestions(this)" oninput="renderSuggestions(this)" onchange="formatTime(this)" placeholder="--:--">
+                                onfocus="renderSuggestions(this)" onclick="renderSuggestions(this)" oninput="renderSuggestions(this)" onchange="formatTime(this)" placeholder="--:--">
                         </div>
                         <div class="time-wrapper">
                             <label>TCT</label>
@@ -1844,18 +1863,34 @@ function renderThongKe() {
   closeAllSuggestions();
 
   const val = inputNode.value.trim().replace(/\D/g, '');
-  let slotsToShow = fullTimeSlots;
+  let slotsToShow = [...fullTimeSlots];
 
   if (val !== "") {
-    slotsToShow = fullTimeSlots.filter(t =>
-      parseInt(t.split(':')[0], 10).toString() === val ||
-      t.replace(':', '').includes(val)
-    );
+    const startsWithHour = [];
+    const startsWithRaw = [];
+    const includesRaw = [];
+
+    slotsToShow.forEach(time => {
+      const hourText = String(parseInt(time.split(':')[0], 10));
+      const rawText = time.replace(':', '');
+
+      if (hourText === val || time.startsWith(val + ':')) {
+        startsWithHour.push(time);
+      } else if (rawText.startsWith(val)) {
+        startsWithRaw.push(time);
+      } else if (rawText.includes(val)) {
+        includesRaw.push(time);
+      }
+    });
+
+    slotsToShow = [...startsWithHour, ...startsWithRaw, ...includesRaw];
   }
 
   if (slotsToShow.length === 0) return;
 
   const wrapper = inputNode.closest('.time-wrapper');
+  if (!wrapper) return;
+
   const dropBox = document.createElement("div");
   dropBox.className = "suggestions-box";
   wrapper.appendChild(dropBox);
@@ -1879,14 +1914,14 @@ function renderThongKe() {
     dropBox.appendChild(item);
   });
 
-  if (val === "") {
-    const index = fullTimeSlots.indexOf("07:00");
-    if (index >= 0) {
-      setTimeout(() => {
-        const itemHeight = window.innerWidth <= 768 ? 64 : 52;
-        dropBox.scrollTop = index * itemHeight;
-      }, 10);
-    }
+  const targetTime = val ? slotsToShow[0] : "07:00";
+  const targetIndex = slotsToShow.indexOf(targetTime);
+  if (targetIndex >= 0) {
+    setTimeout(() => {
+      const firstItem = dropBox.querySelector('.suggestion-item');
+      const itemHeight = firstItem ? firstItem.offsetHeight + 10 : (window.innerWidth <= 768 ? 70 : 62);
+      dropBox.scrollTop = Math.max(0, targetIndex * itemHeight - itemHeight);
+    }, 10);
   }
 }
 
@@ -1900,8 +1935,10 @@ document.addEventListener("mousedown", function(e) {
   }
 });
 
-window.addEventListener("scroll", closeAllSuggestions, true);
-window.addEventListener("resize", closeAllSuggestions);
+if (window.innerWidth > 768) {
+  window.addEventListener("scroll", closeAllSuggestions, true);
+  window.addEventListener("resize", closeAllSuggestions);
+}
 
     function formatTime(input) {
         let val = input.value.trim().replace(',', '.'); if (!val) return;
