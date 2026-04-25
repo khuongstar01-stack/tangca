@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Hệ Thống Chấm Công</title>
     <style>
         :root { --primary: #4361ee; --primary-light: #e0e7ff; --success: #10b981; --danger: #ef4444; --bg: #f3f4f6; --text-main: #1f2937; --text-muted: #6b7280; }
@@ -1503,137 +1503,48 @@ html, body {
 }
 
 
+/* ===== CARD ĐÃ NHẬP DỮ LIỆU + CỐ ĐỊNH KHÔNG ZOOM ===== */
+html, body {
+  touch-action: manipulation;
+}
+
+input,
+select,
+textarea,
+button {
+  font-size: 16px !important;
+}
+
+.worker-card.has-input {
+  border: 1.5px solid #86efac !important;
+  background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%) !important;
+  box-shadow: 0 8px 20px rgba(34, 197, 94, 0.10) !important;
+}
+
+.worker-card.has-input .w-name {
+  color: #166534 !important;
+}
+
+.worker-card.has-input .time-input {
+  border-color: #86efac !important;
+  background: #ffffff !important;
+}
+
+.worker-card.has-input .badge-shift {
+  background: #dcfce7 !important;
+  color: #15803d !important;
+}
+
+.worker-card.has-input .in-lenca,
+.worker-card.has-input .in-xuongca,
+.worker-card.has-input .in-tct {
+  background: #f0fdf4 !important;
+  color: #166534 !important;
+}
+
+
 #login-ui.hidden-login {
   display: none !important;
-}
-
-/* ===== TINH CHỈNH CARD CHẤM CÔNG GỌN VÀ ĐẸP HƠN ===== */
-.worker-card {
-  border-radius: 18px !important;
-  padding: 14px !important;
-  margin-bottom: 14px !important;
-  box-shadow: 0 8px 22px rgba(0,0,0,0.05) !important;
-  border: 1px solid rgba(67, 97, 238, 0.08) !important;
-}
-
-.w-name {
-  font-size: 16px !important;
-  font-weight: 800 !important;
-  margin-bottom: 8px !important;
-  line-height: 1.2 !important;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.w-details {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 6px !important;
-  margin-top: 0 !important;
-  margin-bottom: 12px !important;
-}
-
-.badge {
-  padding: 5px 9px !important;
-  border-radius: 9px !important;
-  font-size: 11px !important;
-  font-weight: 700 !important;
-  background: #f3f4f6 !important;
-  color: #6b7280 !important;
-  line-height: 1.1 !important;
-}
-
-.badge-shift {
-  background: #e8edff !important;
-  color: #4361ee !important;
-}
-
-.time-row {
-  gap: 10px !important;
-  margin-top: 8px !important;
-}
-
-.time-wrapper label {
-  font-size: 11px !important;
-  font-weight: 800 !important;
-  margin-bottom: 7px !important;
-  color: #6b7280 !important;
-  letter-spacing: 0.02em;
-}
-
-.time-input {
-  min-height: 48px !important;
-  padding: 10px 8px !important;
-  border-radius: 14px !important;
-  font-size: 15px !important;
-  font-weight: 800 !important;
-  background: #f8fafc !important;
-  border: 1px solid #e5e7eb !important;
-  box-shadow: none !important;
-}
-
-.time-input:focus {
-  background: #ffffff !important;
-  border-color: #8ea2ff !important;
-  box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.12) !important;
-}
-
-.disabled-card {
-  opacity: 1 !important;
-  background: #fcfcfd !important;
-  border: 1px dashed #d9dee8 !important;
-}
-
-.disabled-card .time-input {
-  background: #f3f4f6 !important;
-  color: #9ca3af !important;
-}
-
-.status-badge {
-  padding: 5px 10px !important;
-  border-radius: 999px !important;
-  font-size: 10px !important;
-  font-weight: 800 !important;
-}
-
-/* mobile gọn hơn nữa */
-@media (max-width: 768px) {
-  .worker-card {
-    border-radius: 16px !important;
-    padding: 12px !important;
-  }
-
-  .w-name {
-    font-size: 15px !important;
-    margin-bottom: 7px !important;
-  }
-
-  .w-details {
-    gap: 5px !important;
-    margin-bottom: 10px !important;
-  }
-
-  .badge {
-    font-size: 10px !important;
-    padding: 5px 8px !important;
-  }
-
-  .time-row {
-    gap: 8px !important;
-    margin-top: 6px !important;
-  }
-
-  .time-wrapper label {
-    font-size: 10px !important;
-    margin-bottom: 6px !important;
-  }
-
-  .time-input {
-    min-height: 44px !important;
-    font-size: 14px !important;
-    border-radius: 12px !important;
-  }
 }
 
 </style>
@@ -1869,7 +1780,6 @@ html, body {
         const loginUI = document.getElementById("login-ui");
         const appHeader = document.getElementById("app-header");
         const loadingUI = document.getElementById("loading");
-
         if (loginUI) {
             loginUI.style.display = "none";
             loginUI.classList.add("hidden-login");
@@ -1991,7 +1901,6 @@ function renderMainMenu() {
         loginUI.style.display = 'none';
         loginUI.classList.add('hidden-login');
     }
-
     document.getElementById('loading').style.display = 'none';
 
     if (currentRole === 'ADMIN') {
@@ -2164,7 +2073,34 @@ function renderThongKe() {
         return raw;
     }
 
-    function renderWorkerList() {
+    
+function updateWorkerCardState(card) {
+  if (!card) return;
+
+  const lenCa = card.querySelector('.in-lenca')?.value.trim() || "";
+  const xuongCa = card.querySelector('.in-xuongca')?.value.trim() || "";
+  const tct = card.querySelector('.in-tct')?.value.trim() || "";
+
+  if (lenCa !== "" || xuongCa !== "" || tct !== "") {
+    card.classList.add('has-input');
+  } else {
+    card.classList.remove('has-input');
+  }
+}
+
+function bindWorkerCardInputEvents() {
+  document.querySelectorAll('.active-card').forEach(card => {
+    const inputs = card.querySelectorAll('.in-lenca, .in-xuongca, .in-tct');
+    inputs.forEach(input => {
+      input.addEventListener('input', () => updateWorkerCardState(card));
+      input.addEventListener('change', () => updateWorkerCardState(card));
+    });
+    updateWorkerCardState(card);
+  });
+}
+
+
+function renderWorkerList() {
         let filtered = serverData.congnhan.filter(r => r[4] && r[4].toString().toUpperCase().trim() === currentUser);
         if (currentShift !== "ALL") filtered = filtered.filter(r => r[5] && r[5].toString().toUpperCase().trim() === currentShift);
         if (currentSearch !== "") {
@@ -2230,6 +2166,7 @@ function renderThongKe() {
         document.getElementById('list-chua-cham').innerHTML = htmlChua || `<div class="worker-card" style="text-align:center; color:var(--success); font-weight:bold;">Tất cả đã chấm xong!</div>`;
         document.getElementById('list-da-cham').innerHTML = htmlDa || `<div class="worker-card" style="text-align:center;">Chưa có dữ liệu.</div>`;
         document.getElementById('btn-chua').innerText = `CHƯA CHẤM (${countChua})`; document.getElementById('btn-da').innerText = `ĐÃ LƯU (${countDa})`;
+        bindWorkerCardInputEvents();
     }
 
     function renderSuggestions(inputNode) {
