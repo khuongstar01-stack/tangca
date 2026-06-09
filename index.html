@@ -132,9 +132,7 @@
         }
         .excel-filter-panel {
             display: none;
-            position: absolute;
-            top: 24px;
-            left: 0;
+            position: fixed;
             width: 230px;
             max-width: 70vw;
             padding: 6px;
@@ -145,6 +143,7 @@
             font-size: 12px;
             font-weight: normal;
             color: #000;
+            transform: none !important;
         }
         .excel-filter-panel.open { display: block; }
         .excel-filter-list {
@@ -275,8 +274,8 @@
                 border-top-width: 4px;
             }
             .excel-filter-panel {
-                width: 210px;
-                top: 20px;
+                width: min(280px, calc(100vw - 12px));
+                max-width: calc(100vw - 12px);
             }
         }
 
@@ -467,6 +466,7 @@
             const table = document.getElementById('dataTable');
 
             if (!wrapper || !table) return;
+            if (document.querySelector('.excel-filter-panel.open')) return;
 
             table.style.transform = '';
             table.style.transformOrigin = '';
@@ -950,8 +950,30 @@
             return cell && cell.value !== null && cell.value !== undefined ? String(cell.value) : "";
         }
 
+        function getFilterHeaderIndex(sheet) {
+            if (!sheet || !Array.isArray(sheet.rows)) return -1;
+            const directIdx = sheet.rows.indexOf(sheet.headerRow);
+            if (directIdx >= 0) return directIdx;
+            return sheet.rows.findIndex(row => isFilterHeaderRow(sheet, row));
+        }
+
+        function isFilterHeaderRow(sheet, row) {
+            if (!row) return false;
+            if (sheet && row === sheet.headerRow) return true;
+            return row.some(cell => {
+                let v = String(cell.value).trim().toUpperCase();
+                return v === "MODEL" || v === "??" || v === "?箄疏?交?" || v === "???株?" || v === "?";
+            });
+        }
+
+        function getFilterDataRows(sheet) {
+            const headerIdx = getFilterHeaderIndex(sheet);
+            if (headerIdx >= 0) return sheet.rows.slice(headerIdx + 1);
+            return sheet.rows.slice(1);
+        }
+
         function getColumnFilterValues(sheet, colIdx) {
-            return [...new Set(sheet.rows.slice(1).map(row => getCellFilterValue(row[colIdx])))]
+            return [...new Set(getFilterDataRows(sheet).map(row => getCellFilterValue(row[colIdx])))]
                 .filter(v => v !== "")
                 .sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }));
         }
@@ -980,6 +1002,29 @@
             document.querySelectorAll('.excel-filter-panel.open').forEach(panel => {
                 if (panel !== exceptPanel) panel.classList.remove('open');
             });
+        }
+
+        function positionExcelFilterPanel(button, panel) {
+            const rect = button.getBoundingClientRect();
+            const gap = 4;
+            const margin = 6;
+            const panelWidth = Math.min(panel.offsetWidth || 230, window.innerWidth - margin * 2);
+            const left = Math.min(Math.max(rect.left, margin), window.innerWidth - panelWidth - margin);
+            let top = rect.bottom + gap;
+            let maxHeight = window.innerHeight - top - margin;
+
+            if (maxHeight < 160) {
+                const aboveHeight = rect.top - margin - gap;
+                if (aboveHeight > maxHeight) {
+                    maxHeight = aboveHeight;
+                    top = Math.max(margin, rect.top - gap - Math.min(maxHeight, 300));
+                }
+            }
+
+            panel.style.left = left + 'px';
+            panel.style.top = top + 'px';
+            panel.style.width = panelWidth + 'px';
+            panel.querySelector('.excel-filter-list').style.maxHeight = Math.max(120, Math.min(300, maxHeight - 46)) + 'px';
         }
 
         function buildExcelFilterControl(sheet, colIdx, isColHidden) {
@@ -1068,13 +1113,16 @@
             panel.appendChild(list);
             panel.appendChild(actions);
             wrap.appendChild(button);
-            wrap.appendChild(panel);
+            document.body.appendChild(panel);
 
             button.onclick = e => {
                 e.stopPropagation();
                 const shouldOpen = !panel.classList.contains('open');
                 closeAllExcelFilters(panel);
                 panel.classList.toggle('open', shouldOpen);
+                if (shouldOpen) {
+                    positionExcelFilterPanel(button, panel);
+                }
             };
 
             updateSelectAllState();
@@ -1084,8 +1132,10 @@
         function renderTable() {
             let sheet = allSheetsData[currentSheetIndex];
             const thead = document.getElementById('tableHead');
+            document.querySelectorAll('.excel-filter-panel').forEach(panel => panel.remove());
             thead.innerHTML = '';
             let tr = document.createElement('tr');
+            const hasFilterHeaderInBody = getFilterHeaderIndex(sheet) > 0;
 
             sheet.headers.forEach((h, idx) => {
                 let isColHidden = sheet.hiddenCols.includes(idx);
@@ -1107,7 +1157,9 @@
                     </div><br>`;
                 }
                 th.innerHTML = `${adminToggleStr}${h.value || ""}<br>`;
-                th.appendChild(buildExcelFilterControl(sheet, idx, isColHidden));
+                if (!hasFilterHeaderInBody) {
+                    th.appendChild(buildExcelFilterControl(sheet, idx, isColHidden));
+                }
                 tr.appendChild(th);
             });
 
@@ -1122,6 +1174,9 @@
             const thead = document.getElementById('tableHead');
             let search = document.getElementById('searchInput').value.toLowerCase().trim();
             let sheet = allSheetsData[currentSheetIndex];
+            if (getFilterHeaderIndex(sheet) > 0) {
+                document.querySelectorAll('.excel-filter-panel').forEach(panel => panel.remove());
+            }
             let isFiltering = hasActiveColumnFilters(sheet);
 
             if (search === "") {
@@ -1142,15 +1197,15 @@
                 if (!sheet) return;
                 let tabTotal = 0;
                 let hasVisibleRows = false;
+                const filterHeaderIdx = getFilterHeaderIndex(sheet);
 
-                sheet.rows.slice(1).forEach(row => {
-                    let isRealHeaderRow = row.some(cell => {
-                        let v = String(cell.value).trim().toUpperCase();
-                        return v === "MODEL" || v === "料號" || v === "出貨日期" || v === "舊項目號" || v === "項目";
-                    });
+                sheet.rows.slice(1).forEach((row, rowOffset) => {
+                    const rowIdx = rowOffset + 1;
+                    let isRealHeaderRow = isFilterHeaderRow(sheet, row);
+                    const isAboveOrAtFilterHeader = filterHeaderIdx >= 0 && rowIdx <= filterHeaderIdx;
 
                     let passFilter = true;
-                    if (!isRealHeaderRow) {
+                    if (!isAboveOrAtFilterHeader) {
                         for (let col in activeFilters) {
                             const selectedValues = activeFilters[col];
                             if (Array.isArray(selectedValues) && !selectedValues.includes(getCellFilterValue(row[col]))) {
@@ -1216,6 +1271,11 @@
                             } else {
                                 td.innerText = isPending ? isPending.val : (cell.value || "");
                                 if (isPending) td.classList.add("modified-cell");
+                            }
+
+                            if (isRealHeaderRow && filterHeaderIdx > 0) {
+                                td.appendChild(document.createElement('br'));
+                                td.appendChild(buildExcelFilterControl(sheet, idx, isColHidden));
                             }
 
                             if (isPending) {
