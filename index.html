@@ -950,6 +950,11 @@
             return cell && cell.value !== null && cell.value !== undefined ? String(cell.value) : "";
         }
 
+        function shouldMoveFilterToBodyHeader(sheet) {
+            const sheetName = String(sheet && sheet.sheetName ? sheet.sheetName : "");
+            return sheetName.includes("欠數") || sheetName.includes("欠数");
+        }
+
         function getFilterHeaderIndex(sheet) {
             if (!sheet || !Array.isArray(sheet.rows)) return -1;
             const modelIdx = sheet.rows.findIndex(row => row.some(cell => {
@@ -1144,6 +1149,7 @@
             document.querySelectorAll('.excel-filter-panel').forEach(panel => panel.remove());
             thead.innerHTML = '';
             let tr = document.createElement('tr');
+            const moveFilterToBodyHeader = shouldMoveFilterToBodyHeader(sheet);
 
             sheet.headers.forEach((h, idx) => {
                 let isColHidden = sheet.hiddenCols.includes(idx);
@@ -1165,6 +1171,10 @@
                     </div><br>`;
                 }
                 th.innerHTML = `${adminToggleStr}${h.value || ""}`;
+                if (!moveFilterToBodyHeader) {
+                    th.appendChild(document.createElement('br'));
+                    th.appendChild(buildExcelFilterControl(sheet, idx, isColHidden));
+                }
                 tr.appendChild(th);
             });
 
@@ -1179,7 +1189,8 @@
             const thead = document.getElementById('tableHead');
             let search = document.getElementById('searchInput').value.toLowerCase().trim();
             let sheet = allSheetsData[currentSheetIndex];
-            if (getFilterHeaderIndex(sheet) > 0) {
+            const moveFilterToBodyHeader = shouldMoveFilterToBodyHeader(sheet);
+            if (moveFilterToBodyHeader && getFilterHeaderIndex(sheet) > 0) {
                 document.querySelectorAll('.excel-filter-panel').forEach(panel => panel.remove());
             }
             let isFiltering = hasActiveColumnFilters(sheet);
@@ -1278,7 +1289,7 @@
                                 if (isPending) td.classList.add("modified-cell");
                             }
 
-                            if (isRealHeaderRow && filterHeaderIdx > 0) {
+                            if (moveFilterToBodyHeader && isRealHeaderRow && filterHeaderIdx > 0) {
                                 td.appendChild(document.createElement('br'));
                                 td.appendChild(buildExcelFilterControl(sheet, idx, isColHidden));
                             }
