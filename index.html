@@ -147,19 +147,11 @@
             color: #000;
         }
         .excel-filter-panel.open { display: block; }
-        .excel-filter-search {
-            width: 100%;
-            height: 24px;
-            box-sizing: border-box;
-            margin-bottom: 5px;
-            padding: 3px 6px;
-            border: 1px solid #9a9a9a;
-            font-size: 12px;
-            font-family: inherit;
-        }
         .excel-filter-list {
-            max-height: 170px;
+            max-height: 220px;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
             background: #fff;
             border: 1px solid #d0d0d0;
             padding: 2px;
@@ -1008,11 +1000,6 @@
             panel.className = 'excel-filter-panel';
             panel.onclick = e => e.stopPropagation();
 
-            const search = document.createElement('input');
-            search.type = 'text';
-            search.className = 'excel-filter-search';
-            search.placeholder = 'T\u00ecm ki\u1ebfm';
-
             const list = document.createElement('div');
             list.className = 'excel-filter-list';
 
@@ -1053,14 +1040,6 @@
                 updateSelectAllState();
             };
 
-            search.oninput = () => {
-                const keyword = search.value.toLowerCase().trim();
-                list.querySelectorAll('.excel-filter-option').forEach((label, idx) => {
-                    if (idx === 0) return;
-                    label.style.display = label.textContent.toLowerCase().includes(keyword) ? '' : 'none';
-                });
-            };
-
             const actions = document.createElement('div');
             actions.className = 'excel-filter-actions';
 
@@ -1086,7 +1065,6 @@
 
             actions.appendChild(cancelBtn);
             actions.appendChild(okBtn);
-            panel.appendChild(search);
             panel.appendChild(list);
             panel.appendChild(actions);
             wrap.appendChild(button);
@@ -1097,11 +1075,6 @@
                 const shouldOpen = !panel.classList.contains('open');
                 closeAllExcelFilters(panel);
                 panel.classList.toggle('open', shouldOpen);
-                if (shouldOpen) {
-                    search.value = '';
-                    list.querySelectorAll('.excel-filter-option').forEach(label => label.style.display = '');
-                    search.focus();
-                }
             };
 
             updateSelectAllState();
