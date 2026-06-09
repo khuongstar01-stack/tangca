@@ -952,6 +952,10 @@
 
         function getFilterHeaderIndex(sheet) {
             if (!sheet || !Array.isArray(sheet.rows)) return -1;
+            const modelIdx = sheet.rows.findIndex(row => row.some(cell => {
+                return String(cell.value || "").trim().toUpperCase().includes("MODEL");
+            }));
+            if (modelIdx >= 0) return modelIdx;
             const directIdx = sheet.rows.indexOf(sheet.headerRow);
             if (directIdx >= 0) return directIdx;
             return sheet.rows.findIndex(row => isFilterHeaderRow(sheet, row));
@@ -962,7 +966,7 @@
             if (sheet && row === sheet.headerRow) return true;
             return row.some(cell => {
                 let v = String(cell.value).trim().toUpperCase();
-                return v === "MODEL" || v === "??" || v === "?箄疏?交?" || v === "???株?" || v === "?";
+                return v.includes("MODEL");
             });
         }
 
@@ -974,8 +978,13 @@
 
         function getColumnFilterValues(sheet, colIdx) {
             return [...new Set(getFilterDataRows(sheet).map(row => getCellFilterValue(row[colIdx])))]
-                .filter(v => v !== "")
-                .sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }));
+                .sort((a, b) => {
+                    if (a === "" && b !== "") return -1;
+                    if (a !== "" && b === "") return 1;
+                    if (a === "0" && b !== "0") return -1;
+                    if (a !== "0" && b === "0") return 1;
+                    return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+                });
         }
 
         function getSelectedFilterValues(colIdx, allValues) {
@@ -1074,7 +1083,7 @@
                 checkbox.onchange = updateSelectAllState;
 
                 label.appendChild(checkbox);
-                label.appendChild(document.createTextNode(value));
+                label.appendChild(document.createTextNode(value === "" ? '(Tr\u1ed1ng)' : value));
                 list.appendChild(label);
             });
 
@@ -1135,7 +1144,6 @@
             document.querySelectorAll('.excel-filter-panel').forEach(panel => panel.remove());
             thead.innerHTML = '';
             let tr = document.createElement('tr');
-            const hasFilterHeaderInBody = getFilterHeaderIndex(sheet) > 0;
 
             sheet.headers.forEach((h, idx) => {
                 let isColHidden = sheet.hiddenCols.includes(idx);
@@ -1156,10 +1164,7 @@
                         ${isColHidden ? '👁️ Hiện ra' : '🙈 Ẩn đi'}
                     </div><br>`;
                 }
-                th.innerHTML = `${adminToggleStr}${h.value || ""}<br>`;
-                if (!hasFilterHeaderInBody) {
-                    th.appendChild(buildExcelFilterControl(sheet, idx, isColHidden));
-                }
+                th.innerHTML = `${adminToggleStr}${h.value || ""}`;
                 tr.appendChild(th);
             });
 
@@ -1374,7 +1379,7 @@
                     s.rows.slice(1).forEach(r => {
                         let isH = r.some(c => {
                             let v = String(c.value).trim().toUpperCase();
-                            return v === "MODEL" || v === "料號" || v === "出貨日期" || v === "舊項目號" || v === "項目";
+                            return v.includes("MODEL");
                         });
 
                         if (!isH && r.some(c => String(c.value).toLowerCase().includes(search))) {
