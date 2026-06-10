@@ -7,7 +7,7 @@
     <style>
         * { box-sizing: border-box; }
         body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background-color: #f4f7f6; color: #333; overflow-x: hidden; }
-        .app-header { background-color: #1a73e8; color: white; padding: 12px 15px; display: flex; flex-direction: column; gap: 10px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+        .app-header { background-color: #1a73e8; color: white; padding: 8px 15px 10px; display: flex; flex-direction: column; gap: 6px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
         .header-top { display: grid; grid-template-columns: 38px minmax(0, 1fr) 38px; align-items: flex-start; gap: 10px; }
         .header-left { display: flex; flex-direction: column; align-items: center; text-align: center; grid-column: 2; min-width: 0; }
         .app-title { font-size: 18px; font-weight: bold; margin: 0; }
@@ -65,20 +65,21 @@
             100% { bottom: 30px; opacity: 1; }
         }
 
-        .search-container { width: 100%; position: relative; }
+        .search-container { width: 100%; position: relative; margin: 0; padding: 0 12px 8px; background: #f4f7f6; }
         .search-box {
             width: 100%; padding: 10px 15px 10px 35px; border-radius: 8px; border: none; outline: none;
             font-size: 16px !important; box-shadow: inset 0 2px 4px rgba(0,0,0,0.15);
         }
         .search-container::before {
-            content: '🔍'; position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+            content: '🔍'; position: absolute; left: 24px; top: 50%; transform: translateY(-50%);
             font-size: 14px; color: #666;
         }
         
         .announcement-board {
-            margin: 10px 15px; padding: 12px; background: #fff3cd; border: 1px solid #ffeeba;
+            width: 100%; margin: 0; padding: 10px 12px; background: #fff3cd; border: 1px solid #ffeeba;
             border-radius: 8px; color: #856404; display: none; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
+        .announcement-shell { width: 100%; padding: 8px 12px 6px; background: #f4f7f6; }
         .edit-announce-btn {
             background: #856404; color: white; border: none; padding: 5px 10px; border-radius: 4px;
             cursor: pointer; font-size: 12px; font-weight: bold; margin-left: 10px;
@@ -235,7 +236,10 @@
         /* CSS ĐIỆN THOẠI: GIỮ 1 DÒNG + TỰ CO NHỎ TOÀN BẢNG         */
         /* ======================================================= */
         @media (max-width: 768px) {
-            .app-header { padding: 10px; }
+            .app-header { padding: 8px 10px 9px; gap: 6px; }
+            .announcement-shell { padding: 8px 10px 6px; }
+            .search-container { padding: 0 10px 8px; }
+            .search-container::before { left: 22px; }
             .header-top { grid-template-columns: 38px minmax(0, 1fr) 38px; align-items: flex-start; gap: 8px; }
             .header-left { min-width: 0; }
             .header-actions { width: auto; justify-content: flex-end; }
@@ -339,6 +343,8 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="announcement-shell">
         <div id="announcementBoard" class="announcement-board">
             <div style="display: flex; align-items: center; justify-content: space-between;">
                 <div style="display: flex; align-items: center; gap: 10px;">
@@ -351,10 +357,10 @@
                 <button id="editAnnounceBtn" class="edit-announce-btn" onclick="editAnnouncement()" style="display: none;">Sửa</button>
             </div>
         </div>
+    </div>
         <div class="search-container">
             <input type="text" id="searchInput" class="search-box" placeholder="Tìm nhanh ..." onkeyup="renderTableBody()">
         </div>
-    </div>
     
     <div class="tabs-container" id="tabContainer"></div>
     <div class="table-area">
