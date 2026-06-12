@@ -8,7 +8,7 @@
         * { box-sizing: border-box; }
         body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background-color: #f4f7f6; color: #333; overflow-x: hidden; }
         .top-card {
-            width: 100%; position: sticky; top: 0; z-index: 100;
+            width: 100%; position: relative; z-index: 1000;
             background: linear-gradient(293deg, rgb(185, 185, 255) 0%, rgb(72, 225, 255) 100%);
             border-radius: 0 0 12px 12px;
             box-shadow: rgba(50, 50, 93, 0.25) 0 50px 100px -20px, rgba(0, 0, 0, 0.3) 0 30px 60px -30px;
@@ -71,7 +71,10 @@
             100% { bottom: 30px; opacity: 1; }
         }
 
-        .search-container { width: 100%; margin: 0; padding: 8px 12px 10px; background: transparent; }
+        .search-container {
+            width: 100%; margin: 0; padding: 8px 12px 10px;
+            background: #fff; position: relative; z-index: 1001;
+        }
         .search-control {
             position: relative; width: 100%; min-height: 40px; border-radius: 50px;
             background: linear-gradient(135deg, rgb(218, 232, 247) 0%, rgb(214, 229, 247) 100%);
@@ -111,18 +114,23 @@
         }
         
         .announcement-board {
-            width: 100%; margin: 0; padding: 10px 12px; background: #fff3cd; border: 1px solid #ffeeba;
-            border-radius: 8px; color: #856404; display: none; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            width: 100%; margin: 0; padding: 10px 12px;
+            background: linear-gradient(135deg, #f4fbff 0%, #edf2ff 100%);
+            border: 1px solid rgba(47, 128, 237, 0.24);
+            border-radius: 8px; color: #24527a; display: none;
+            box-shadow: 0 3px 10px rgba(41, 98, 160, 0.12);
         }
         .announcement-shell { width: 100%; padding: 6px 12px 8px; background: transparent; }
         .edit-announce-btn {
-            background: #856404; color: white; border: none; padding: 5px 10px; border-radius: 4px;
+            background: #327ac0; color: white; border: none; padding: 5px 10px; border-radius: 4px;
             cursor: pointer; font-size: 12px; font-weight: bold; margin-left: 10px;
         }
         
         .tabs-container {
             padding: 10px 15px 0 15px; background: white; border-bottom: 3px solid #1a73e8;
             overflow-x: auto; white-space: nowrap; display: flex; gap: 6px;
+            position: sticky; top: 0; z-index: 900;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.12);
         }
         .tab-btn {
             background-color: #f1f3f4; border: 1px solid #dadce0; border-bottom: none; outline: none;
@@ -136,6 +144,17 @@
             background: white; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             overflow-x: auto; border: 1px solid #ccc; width: 100%; margin-bottom: 20px;
         }
+        .sticky-table-header {
+            display: none; position: fixed; z-index: 850; overflow: hidden;
+            background: #fff; border: 1px solid #ccc; border-top: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.16);
+        }
+        .sticky-table-header.active { display: block; }
+        .sticky-table-header table {
+            width: max-content; margin: 0; table-layout: fixed;
+            border-collapse: collapse; background: #fff;
+        }
+        #tableHeadPlaceholder { visibility: hidden; pointer-events: none; }
         table { border-collapse: collapse; width: 100%; border: 1px solid #000; }
         
         th, td {
@@ -493,6 +512,9 @@
         </div>
     
     <div class="tabs-container" id="tabContainer"></div>
+    <div class="sticky-table-header" id="stickyTableHeader" aria-hidden="true">
+        <table id="stickyHeaderTable"></table>
+    </div>
     <div class="table-area">
         <div class="table-wrapper" id="tableContainer" style="display:none;">
             <table id="dataTable">
@@ -1110,6 +1132,7 @@
 
             renderTable();
             requestAnimationFrame(fitTableToScreen);
+            requestAnimationFrame(updateStickyTableHeader);
         }
 
         function getCellFilterValue(cell) {
@@ -1347,6 +1370,7 @@
             thead.appendChild(tr);
             renderTableBody();
             requestAnimationFrame(fitTableToScreen);
+            requestAnimationFrame(updateStickyTableHeader);
         }
 
         function renderTableBody() {
@@ -1356,13 +1380,14 @@
             let search = document.getElementById('searchInput').value.toLowerCase().trim();
             let sheet = allSheetsData[currentSheetIndex];
             const moveFilterToBodyHeader = shouldMoveFilterToBodyHeader(sheet);
+            const keepCurrentSheetLayout = search !== "" && /欠[数數]-11/.test(String(sheet && sheet.sheetName || ""));
             if (moveFilterToBodyHeader && getFilterHeaderIndex(sheet) > 0) {
                 document.querySelectorAll('.excel-filter-panel').forEach(panel => panel.remove());
             }
             let isFiltering = hasActiveColumnFilters(sheet);
 
-            if (search === "") {
-                thead.style.display = '';
+            if (search === "" || keepCurrentSheetLayout) {
+                thead.style.display = keepCurrentSheetLayout ? 'none' : '';
                 let editColIdx = -1;
                 let sumColIdx = -1;
                 let lastColIdx = -1;
@@ -1385,6 +1410,12 @@
                     const rowIdx = rowOffset + 1;
                     let isRealHeaderRow = isFilterHeaderRow(sheet, row);
                     const isAboveOrAtFilterHeader = filterHeaderIdx >= 0 && rowIdx <= filterHeaderIdx;
+
+                    if (keepCurrentSheetLayout) {
+                        if (filterHeaderIdx >= 0 && rowIdx < filterHeaderIdx) return;
+                        const matchesSearch = row.some(cell => String(cell.value || "").toLowerCase().includes(search));
+                        if (!isRealHeaderRow && !matchesSearch) return;
+                    }
 
                     let passFilter = true;
                     if (!isAboveOrAtFilterHeader) {
@@ -1412,7 +1443,7 @@
                         let isColHidden = sheet.hiddenCols.includes(idx);
                         if (isColHidden && currentAdminPass === "") return;
 
-                        if (isFiltering || !cell.isHidden) {
+                        if (isFiltering || keepCurrentSheetLayout || !cell.isHidden) {
                             let td = document.createElement('td');
                             
                             if (isColHidden) {
@@ -1469,7 +1500,7 @@
 
                             if (cell.weight === 'bold') td.style.fontWeight = 'bold';
                             if (cell.hAlign) td.style.textAlign = cell.hAlign;
-                            if (!isFiltering) {
+                            if (!isFiltering && !keepCurrentSheetLayout) {
                                 if (cell.colSpan > 1) td.colSpan = cell.colSpan;
                                 if (cell.rowSpan > 1 && !isRealHeaderRow) td.rowSpan = cell.rowSpan;
                             }
@@ -1582,8 +1613,13 @@
 
                         let innerThead = document.createElement('thead');
 
+                        const resultHeaderIndex = getFilterHeaderIndex(s);
+                        const resultHeaders = shouldMoveFilterToBodyHeader(s) && resultHeaderIndex >= 0
+                            ? s.rows[resultHeaderIndex]
+                            : s.headers;
+
                         let visibleColCount = 0;
-                        s.headers.forEach((h, idx) => {
+                        resultHeaders.forEach((h, idx) => {
                             let isColHidden = s.hiddenCols.includes(idx);
                             if (!(isColHidden && currentAdminPass === "")) visibleColCount++;
                         });
@@ -1594,7 +1630,7 @@
 
                         let trH = document.createElement('tr');
                         trH.style.backgroundColor = "#e8f0fe";
-                        s.headers.forEach((h, idx) => {
+                        resultHeaders.forEach((h, idx) => {
                             let isColHidden = s.hiddenCols.includes(idx);
                             if (isColHidden && currentAdminPass === "") return;
 
@@ -1755,6 +1791,7 @@
             }
 
             requestAnimationFrame(fitTableToScreen);
+            requestAnimationFrame(updateStickyTableHeader);
         }
 
         function toggleHeaderActions(event) {
@@ -1763,9 +1800,147 @@
             if (actions) actions.classList.toggle('open');
         }
 
+        let stickyHeaderActive = false;
+        let stickyHeaderPlaceholder = null;
+        let stickyHeaderFrame = null;
+
+        function cloneStickyHeaderPlaceholder(thead) {
+            const clone = thead.cloneNode(true);
+            clone.id = 'tableHeadPlaceholder';
+            clone.setAttribute('aria-hidden', 'true');
+            clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+            clone.querySelectorAll('th').forEach(th => {
+                th.style.width = '';
+                th.style.minWidth = '';
+                th.style.maxWidth = '';
+            });
+            return clone;
+        }
+
+        function syncStickyHeaderPlaceholder() {
+            if (!stickyHeaderActive || !stickyHeaderPlaceholder) return;
+            const thead = document.getElementById('tableHead');
+            if (!thead) return;
+            const nextPlaceholder = cloneStickyHeaderPlaceholder(thead);
+            stickyHeaderPlaceholder.replaceWith(nextPlaceholder);
+            stickyHeaderPlaceholder = nextPlaceholder;
+        }
+
+        function activateStickyTableHeader() {
+            if (stickyHeaderActive) return;
+            const table = document.getElementById('dataTable');
+            const thead = document.getElementById('tableHead');
+            const fixedTable = document.getElementById('stickyHeaderTable');
+            const fixedBox = document.getElementById('stickyTableHeader');
+            if (!table || !thead || !fixedTable || !fixedBox || !thead.rows.length) return;
+
+            stickyHeaderPlaceholder = cloneStickyHeaderPlaceholder(thead);
+            table.insertBefore(stickyHeaderPlaceholder, thead);
+            fixedTable.appendChild(thead);
+            fixedBox.classList.add('active');
+            fixedBox.setAttribute('aria-hidden', 'false');
+            stickyHeaderActive = true;
+        }
+
+        function deactivateStickyTableHeader() {
+            if (!stickyHeaderActive) return;
+            const thead = document.getElementById('tableHead');
+            const fixedBox = document.getElementById('stickyTableHeader');
+            if (thead && stickyHeaderPlaceholder && stickyHeaderPlaceholder.parentNode) {
+                thead.querySelectorAll('th').forEach(th => {
+                    th.style.width = '';
+                    th.style.minWidth = '';
+                    th.style.maxWidth = '';
+                });
+                stickyHeaderPlaceholder.replaceWith(thead);
+            }
+            stickyHeaderPlaceholder = null;
+            stickyHeaderActive = false;
+            if (fixedBox) {
+                fixedBox.classList.remove('active');
+                fixedBox.setAttribute('aria-hidden', 'true');
+                fixedBox.removeAttribute('style');
+            }
+        }
+
+        function layoutStickyTableHeader() {
+            if (!stickyHeaderActive || !stickyHeaderPlaceholder) return;
+            const tabs = document.getElementById('tabContainer');
+            const wrapper = document.getElementById('tableContainer');
+            const fixedBox = document.getElementById('stickyTableHeader');
+            const fixedTable = document.getElementById('stickyHeaderTable');
+            const thead = document.getElementById('tableHead');
+            if (!tabs || !wrapper || !fixedBox || !fixedTable || !thead || !thead.rows.length) return;
+
+            const wrapperRect = wrapper.getBoundingClientRect();
+            const tabsRect = tabs.getBoundingClientRect();
+            const sourceCells = Array.from(stickyHeaderPlaceholder.rows[0]?.cells || []);
+            const targetCells = Array.from(thead.rows[0]?.cells || []);
+            if (!sourceCells.length || sourceCells.length !== targetCells.length) return;
+
+            const sourceRects = sourceCells.map(cell => cell.getBoundingClientRect());
+            targetCells.forEach((cell, idx) => {
+                const width = sourceRects[idx].width;
+                cell.style.width = width + 'px';
+                cell.style.minWidth = width + 'px';
+                cell.style.maxWidth = width + 'px';
+            });
+
+            const visibleLeft = Math.max(0, wrapperRect.left);
+            const visibleRight = Math.min(window.innerWidth, wrapperRect.right);
+            fixedBox.style.top = tabsRect.bottom + 'px';
+            fixedBox.style.left = visibleLeft + 'px';
+            fixedBox.style.width = Math.max(0, visibleRight - visibleLeft) + 'px';
+            fixedTable.style.width = sourceRects.reduce((sum, rect) => sum + rect.width, 0) + 'px';
+            fixedTable.style.transform = `translateX(${sourceRects[0].left - wrapperRect.left}px)`;
+        }
+
+        function updateStickyTableHeader() {
+            if (stickyHeaderFrame) cancelAnimationFrame(stickyHeaderFrame);
+            stickyHeaderFrame = requestAnimationFrame(() => {
+                stickyHeaderFrame = null;
+                const tabs = document.getElementById('tabContainer');
+                const wrapper = document.getElementById('tableContainer');
+                const thead = document.getElementById('tableHead');
+                const referenceHead = stickyHeaderActive ? stickyHeaderPlaceholder : thead;
+                if (!tabs || !wrapper || !referenceHead || !referenceHead.rows.length || getComputedStyle(thead).display === 'none') {
+                    deactivateStickyTableHeader();
+                    return;
+                }
+
+                const tabsBottom = tabs.getBoundingClientRect().bottom;
+                const wrapperRect = wrapper.getBoundingClientRect();
+                const headerRect = referenceHead.getBoundingClientRect();
+                const shouldStick = headerRect.top <= tabsBottom && wrapperRect.bottom > tabsBottom + headerRect.height;
+
+                if (shouldStick && !stickyHeaderActive) activateStickyTableHeader();
+                if (!shouldStick && stickyHeaderActive) deactivateStickyTableHeader();
+                if (stickyHeaderActive) layoutStickyTableHeader();
+            });
+        }
+
+        function initializeStickyTableHeader() {
+            const thead = document.getElementById('tableHead');
+            const wrapper = document.getElementById('tableContainer');
+            if (thead) {
+                new MutationObserver(() => {
+                    if (stickyHeaderActive) syncStickyHeaderPlaceholder();
+                    updateStickyTableHeader();
+                }).observe(thead, { childList: true, subtree: true, characterData: true });
+            }
+            if (wrapper) wrapper.addEventListener('scroll', updateStickyTableHeader, { passive: true });
+            window.addEventListener('scroll', updateStickyTableHeader, { passive: true });
+        }
+
         window.addEventListener('load', fitTableToScreen);
-        window.addEventListener('resize', fitTableToScreen);
-        window.addEventListener('orientationchange', fitTableToScreen);
+        window.addEventListener('resize', function() {
+            fitTableToScreen();
+            updateStickyTableHeader();
+        });
+        window.addEventListener('orientationchange', function() {
+            fitTableToScreen();
+            updateStickyTableHeader();
+        });
         document.addEventListener('click', function(e) {
             if (!e.target.closest('.excel-filter-wrap')) closeAllExcelFilters();
             if (!e.target.closest('#headerActions')) {
@@ -1774,6 +1949,7 @@
             }
         });
         
+        initializeStickyTableHeader();
         loadDataFromServer();
         startHeartbeat();
     </script>
