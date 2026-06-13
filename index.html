@@ -2,10 +2,14 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#48e1ff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Theo Dõi Xuất Hàng</title>
     <style>
         * { box-sizing: border-box; }
+        html { background: #48e1ff; }
         body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background-color: #f4f7f6; color: #333; overflow-x: hidden; }
         .top-card {
             width: 100%; position: relative; z-index: 1000;
@@ -370,6 +374,7 @@
         /* CSS ĐIỆN THOẠI: GIỮ 1 DÒNG + TỰ CO NHỎ TOÀN BẢNG         */
         /* ======================================================= */
         @media (max-width: 768px) {
+            .top-card { padding-top: env(safe-area-inset-top, 0px); }
             .app-header { padding: 8px 10px 9px; gap: 6px; }
             .announcement-shell { padding: 8px 10px 6px; }
             .search-container { padding: 8px 10px 10px; }
