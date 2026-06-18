@@ -20,9 +20,13 @@
 <meta name="twitter:title" content="Hệ Thống Chấm Công">
 <meta name="twitter:description" content="Ứng dụng chấm công nội bộ nhanh, gọn, dễ dùng.">
 <meta name="twitter:image" content="https://i.postimg.cc/DnbDtwdp/Gemini-Generated-Image-3aa9sn3aa9sn3aa9.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #4361ee; --primary-light: #e0e7ff; --success: #10b981; --danger: #ef4444; --bg: #f3f4f6; --text-main: #1f2937; --text-muted: #6b7280; }
-        body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); margin: 0; padding: 0; color: var(--text-main); }
+        :root { --font-main: "Be Vietnam Pro", "Segoe UI", Arial, sans-serif; --primary: #4361ee; --primary-light: #e0e7ff; --success: #10b981; --danger: #ef4444; --bg: #f3f4f6; --text-main: #1f2937; --text-muted: #6b7280; }
+        body { font-family: var(--font-main); background: var(--bg); margin: 0; padding: 0; color: var(--text-main); text-rendering: geometricPrecision; -webkit-font-smoothing: antialiased; }
+        body, button, input, select, textarea, .swal2-popup { font-family: var(--font-main) !important; }
         .container { width: 100%; margin: 0; padding: 15px; padding-bottom: 90px; }
         
         .app-header { background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%); margin: -15px -15px 0px -15px; padding: 20px 20px 30px 20px; display: flex; justify-content: space-between; align-items: center; color: white; position: sticky; top: 0; z-index: 100; }
@@ -2336,16 +2340,20 @@ html.standalone-app .main-nav {
 }
 
 .cute-save-copy {
-  position: relative;
+  position: absolute;
+  left: 64px;
+  right: 64px;
   z-index: 20;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   line-height: 1;
   min-width: 0;
+  text-align: center;
 }
 
 .cute-save-kicker {
+  display: none;
   margin-bottom: 6px;
   color: #a855f7;
   font-size: 10px;
@@ -2360,6 +2368,7 @@ html.standalone-app .main-nav {
   font-weight: 800;
   letter-spacing: 0;
   white-space: nowrap;
+  text-align: center;
 }
 
 .cute-save-btn:hover .cute-save-title {
@@ -2380,6 +2389,57 @@ html.standalone-app .main-nav {
   background: rgba(255, 255, 255, 0.64);
   box-shadow: inset 0 2px 6px rgba(15, 23, 42, 0.08);
   transition: transform 0.5s ease, color 0.5s ease;
+}
+
+.cute-confirm-popup {
+  border-radius: 28px !important;
+  padding: 26px 22px 24px !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(239, 246, 255, 0.92)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.56) !important;
+  box-shadow: 0 22px 60px rgba(15, 23, 42, 0.20) !important;
+}
+
+.cute-confirm-popup .swal2-title {
+  color: #334155 !important;
+  font-size: 26px !important;
+  font-weight: 800 !important;
+}
+
+.cute-confirm-popup .swal2-html-container {
+  color: #64748b !important;
+  font-size: 16px !important;
+}
+
+.cute-confirm-actions {
+  gap: 12px !important;
+  margin-top: 22px !important;
+}
+
+.cute-confirm-btn {
+  min-width: 116px !important;
+  border: 1px solid rgba(255, 255, 255, 0.48) !important;
+  border-radius: 22px !important;
+  padding: 13px 22px !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  color: #334155 !important;
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.10), inset 0 1px 0 rgba(255, 255, 255, 0.58) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.cute-confirm-btn:hover {
+  transform: translateY(-1px) scale(1.03) !important;
+  box-shadow: 0 14px 30px rgba(167, 139, 250, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.7) !important;
+}
+
+.cute-confirm-save {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.78), rgba(216, 180, 254, 0.38)) !important;
+  color: #7c3aed !important;
+}
+
+.cute-confirm-cancel {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.78), rgba(254, 202, 202, 0.42)) !important;
+  color: #ef4444 !important;
 }
 
 .cute-save-icon svg {
@@ -2503,12 +2563,153 @@ html.standalone-app .main-nav {
     font-size: 17px;
   }
 
+  .cute-save-copy {
+    left: 56px;
+    right: 56px;
+  }
+
   .cute-cat-left {
     left: 20px;
   }
 
   .cute-cat-right {
     right: 24px;
+  }
+}
+
+/* ===== HEADER TÀI KHOẢN ĐỒNG BỘ TÔNG GLASS/PASTEL ===== */
+.app-header.app-header-space {
+  min-height: 70px;
+  margin: -15px -15px 0 -15px !important;
+  padding: 12px 14px 18px !important;
+  align-items: center !important;
+  gap: 12px;
+  overflow: hidden;
+  color: #26364f !important;
+  background: linear-gradient(135deg, rgba(244, 251, 255, 0.94), rgba(237, 242, 255, 0.92)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.64);
+  border-radius: 0 0 24px 24px;
+  box-shadow: 0 12px 30px rgba(47, 128, 237, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(14px);
+}
+
+.app-header.app-header-space::before,
+.app-header.app-header-space::after,
+.app-header.app-header-space .header-glow-orb,
+.app-header.app-header-space .header-stars-1,
+.app-header.app-header-space .header-stars-2,
+.app-header.app-header-space .header-stars-3,
+.app-header.app-header-space .header-shooting-1,
+.app-header.app-header-space .header-shooting-2,
+.app-header.app-header-space .header-shooting-3 {
+  display: none !important;
+}
+
+#acc-display {
+  min-width: 0;
+  max-width: 48%;
+  padding: 10px 12px;
+  border-radius: 18px;
+  color: #334155 !important;
+  background: rgba(255, 255, 255, 0.56);
+  border: 1px solid rgba(255, 255, 255, 0.66);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0 !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app-header.app-header-space > div:last-child {
+  margin-left: auto;
+  gap: 8px !important;
+}
+
+.change-pass-fancy-btn {
+  height: 44px !important;
+  padding: 0 15px !important;
+  border: 1px solid rgba(255, 255, 255, 0.62) !important;
+  border-radius: 18px !important;
+  color: #7c3aed !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.78), rgba(233, 213, 255, 0.42)) !important;
+  box-shadow: 0 10px 24px rgba(124, 58, 237, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.68) !important;
+}
+
+.change-pass-fancy-btn svg {
+  color: #a855f7 !important;
+}
+
+.change-pass-fancy-btn span {
+  color: #334155 !important;
+  font-weight: 800 !important;
+  letter-spacing: 0 !important;
+}
+
+.logout-fancy-btn,
+.logout-fancy-btn:hover {
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  flex: 0 0 44px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.82), rgba(254, 202, 202, 0.48)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.68) !important;
+  box-shadow: 0 10px 24px rgba(239, 68, 68, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.72) !important;
+  justify-content: center !important;
+  padding: 0 !important;
+}
+
+.logout-fancy-sign,
+.logout-fancy-btn:hover .logout-fancy-sign {
+  width: 100% !important;
+  padding: 0 !important;
+}
+
+.logout-fancy-sign svg path {
+  fill: #ef4444 !important;
+}
+
+.logout-fancy-text,
+.logout-fancy-btn:hover .logout-fancy-text {
+  display: none !important;
+}
+
+@media (max-width: 520px) {
+  .app-header.app-header-space {
+    padding: 10px 10px 16px !important;
+    gap: 8px;
+  }
+
+  #acc-display {
+    max-width: 42%;
+    padding: 9px 10px;
+    font-size: 13px !important;
+  }
+
+  .change-pass-fancy-btn {
+    height: 40px !important;
+    padding: 0 11px !important;
+    border-radius: 15px !important;
+  }
+
+  .change-pass-fancy-btn span {
+    font-size: 12px !important;
+  }
+
+  .change-pass-fancy-btn svg {
+    width: 18px !important;
+    height: 18px !important;
+    margin-right: 5px !important;
+  }
+
+  .logout-fancy-btn,
+  .logout-fancy-btn:hover {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    flex-basis: 40px !important;
   }
 }
 
@@ -4187,27 +4388,22 @@ if (window.innerWidth > 768) {
                 title: "Xác nhận lưu dữ liệu?",
                 text: `Sẽ lưu ${payloadData.length} người vào Hệ Thống.`,
                 icon: "question",
-                showDenyButton: true,
                 showCancelButton: true,
                 confirmButtonText: "Lưu",
-                denyButtonText: "Không lưu",
                 cancelButtonText: "Hủy",
-                confirmButtonColor: "#10b981",
-                denyButtonColor: "#64748b",
-                cancelButtonColor: "#ef4444"
+                buttonsStyling: false,
+                customClass: {
+                    popup: "cute-confirm-popup",
+                    actions: "cute-confirm-actions",
+                    confirmButton: "cute-confirm-btn cute-confirm-save",
+                    cancelButton: "cute-confirm-btn cute-confirm-cancel"
+                }
             });
         } else {
             result = { isConfirmed: confirm(`Bạn có muốn lưu ${payloadData.length} người không?`) };
         }
 
         if (!result.isConfirmed) {
-            if (result.isDenied && typeof Swal !== "undefined") {
-                await Swal.fire({
-                    icon: "info",
-                    title: "Chưa lưu",
-                    text: "Dữ liệu tăng ca chưa được lưu."
-                });
-            }
             return;
         }
 
