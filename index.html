@@ -2937,6 +2937,572 @@ html.standalone-app .main-nav {
   }
 }
 
+/* ===== TĂNG TƯƠNG PHẢN RIÊNG NÚT CHẤM CÔNG FIXED ===== */
+#save-btn.cute-save-fixed .cute-save-card {
+  background: linear-gradient(135deg, rgba(14, 210, 218, 0.94) 0%, rgba(67, 97, 238, 0.96) 58%, rgba(95, 41, 199, 0.96) 100%) !important;
+  border-color: rgba(255, 255, 255, 0.42) !important;
+  box-shadow: 0 14px 34px rgba(67, 97, 238, 0.36), inset 0 1px 0 rgba(255, 255, 255, 0.46) !important;
+  backdrop-filter: blur(8px);
+}
+
+#save-btn.cute-save-fixed .cute-save-glow {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.0), rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.0));
+  opacity: 0.28;
+}
+
+#save-btn.cute-save-fixed .cute-save-title,
+#save-btn.cute-save-fixed:hover .cute-save-title,
+#save-btn-text {
+  color: #fff !important;
+  text-shadow: 0 2px 8px rgba(15, 23, 42, 0.28);
+}
+
+#save-btn.cute-save-fixed .cute-save-icon {
+  color: #8b5cf6 !important;
+  background: rgba(255, 255, 255, 0.86) !important;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+}
+
+.admin-lock-card {
+  background: linear-gradient(135deg, rgba(14, 210, 218, 0.16), rgba(67, 97, 238, 0.14), rgba(139, 92, 246, 0.14));
+  border: 1px solid rgba(67, 97, 238, 0.20);
+  border-radius: 16px;
+  padding: 15px;
+  margin-bottom: 16px;
+  box-shadow: 0 12px 28px rgba(67, 97, 238, 0.12);
+}
+
+body.admin-mode #admin-ui {
+  display: block !important;
+  position: relative;
+  z-index: 30;
+  width: min(760px, calc(100vw - 28px));
+  max-width: 100%;
+  margin: 16px auto 120px;
+  padding: 0;
+  overflow: visible !important;
+}
+
+body.admin-mode #main-ui {
+  display: block !important;
+  position: relative;
+  z-index: 25;
+}
+
+body.admin-mode #loading {
+  display: none !important;
+}
+
+body.admin-mode .main-nav,
+body.admin-mode #chamcong-view,
+body.admin-mode #congdoan-view,
+body.admin-mode #thongke-view,
+body.admin-mode #save-btn {
+  display: none !important;
+}
+
+body.admin-mode .container {
+  overflow: visible !important;
+}
+
+body.admin-mode .app-header {
+  display: flex !important;
+}
+
+.admin-lock-title {
+  margin: 0 0 6px;
+  color: #1f2a44;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.admin-lock-hint {
+  margin: 0 0 12px;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.admin-lock-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.admin-lock-field {
+  position: relative;
+  overflow: visible;
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 14px;
+  padding: 10px;
+}
+
+.admin-lock-field .suggestions-box {
+  width: 100% !important;
+  min-width: 100% !important;
+}
+
+.admin-lock-field span {
+  display: block;
+  margin-bottom: 6px;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.admin-lock-field input,
+.admin-lock-field select {
+  width: 100%;
+  border: 1px solid #dbeafe;
+  border-radius: 10px;
+  padding: 10px 8px;
+  color: #0f172a;
+  font-size: 15px;
+  font-weight: 700;
+  background: #ffffff;
+}
+
+.admin-lock-field select {
+  cursor: pointer;
+  appearance: auto;
+}
+
+.admin-lock-actions {
+  display: flex;
+  align-items: stretch;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.admin-lock-status {
+  width: 100%;
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.62);
+  color: #475569;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.admin-unlock-search {
+  width: 100%;
+  margin: 12px 0 10px !important;
+  border: 1px solid rgba(148, 163, 184, 0.35) !important;
+  border-radius: 12px !important;
+  background: rgba(255, 255, 255, 0.86) !important;
+  color: #0f172a !important;
+  font-weight: 700;
+}
+
+.admin-unlock-list {
+  display: grid;
+  gap: 8px;
+  max-height: 340px;
+  overflow-y: auto;
+  padding-right: 3px;
+}
+
+.admin-unlock-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+}
+
+.admin-unlock-name {
+  color: #1f2a44;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.admin-unlock-meta {
+  margin-top: 4px;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.admin-unlock-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 9px 12px;
+  color: #ffffff;
+  background: #4361ee;
+  font-size: 12px;
+  font-weight: 900;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.admin-unlock-btn.is-open {
+  background: #ef4444;
+}
+
+.admin-unlock-empty {
+  padding: 12px;
+  border-radius: 12px;
+  color: #64748b;
+  background: rgba(255, 255, 255, 0.68);
+  text-align: center;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.overtime-locked-card {
+  border-color: rgba(239, 68, 68, 0.28) !important;
+  background: linear-gradient(180deg, #fff7f7 0%, #ffffff 100%) !important;
+}
+
+.overtime-locked-card .time-input {
+  background: #f8fafc !important;
+  color: #94a3b8 !important;
+  cursor: not-allowed;
+}
+
+.badge-locked {
+  background: #fee2e2 !important;
+  color: #b91c1c !important;
+}
+
+.overtime-lock-note {
+  margin-top: 10px;
+  padding: 9px 10px;
+  border-radius: 12px;
+  background: #fff1f2;
+  color: #be123c;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+#save-btn.is-overtime-locked {
+  opacity: 0.78 !important;
+  pointer-events: auto;
+}
+
+@media (max-width: 520px) {
+  .admin-lock-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-lock-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+
+/* ===== DESKTOP POLISH - CHI AP DUNG SAU KHI DANG NHAP ===== */
+@media (min-width: 1024px) {
+  body.app-ready {
+    background:
+      radial-gradient(circle at top left, rgba(34, 211, 238, 0.20), transparent 34%),
+      radial-gradient(circle at bottom right, rgba(95, 41, 199, 0.20), transparent 36%),
+      #eef5f8 !important;
+  }
+
+  body.app-ready .container {
+    width: min(calc(100% - 36px), 1280px) !important;
+    min-height: calc(100vh - 24px);
+    margin: 12px auto !important;
+    padding: 18px 18px 92px !important;
+    border-radius: 26px;
+    background:
+      linear-gradient(rgba(255,255,255,0.88), rgba(255,255,255,0.42)),
+      linear-gradient(135deg, rgba(72,225,255,0.74) 0%, rgba(185,185,255,0.72) 58%, rgba(95,41,199,0.72) 100%) !important;
+    border: 1px solid rgba(255,255,255,0.72);
+    box-shadow: 0 24px 64px rgba(15, 23, 42, 0.16);
+    box-sizing: border-box;
+    overflow: visible !important;
+  }
+
+  body.app-ready .app-header,
+  body.app-ready .app-header.app-header-space {
+    position: relative !important;
+    top: auto !important;
+    z-index: 100 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 14px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 58px !important;
+    margin: 0 0 16px !important;
+    padding: 14px 16px !important;
+    border-radius: 22px !important;
+    background: linear-gradient(135deg, rgba(34,211,238,0.88) 0%, rgba(67,97,238,0.78) 58%, rgba(95,41,199,0.78) 100%) !important;
+    border: 1px solid rgba(255,255,255,0.48);
+    box-shadow: 0 14px 34px rgba(15, 23, 42, 0.12);
+    backdrop-filter: blur(12px);
+    overflow: visible !important;
+    box-sizing: border-box;
+  }
+
+  body.app-ready .app-header.app-header-space::before,
+  body.app-ready .app-header.app-header-space::after,
+  body.app-ready .header-glow-orb,
+  body.app-ready .header-stars-1,
+  body.app-ready .header-stars-2,
+  body.app-ready .header-stars-3,
+  body.app-ready .header-shooting-1,
+  body.app-ready .header-shooting-2,
+  body.app-ready .header-shooting-3 {
+    display: none !important;
+  }
+
+  body.app-ready #acc-display {
+    position: relative;
+    z-index: 5;
+    flex: 0 1 auto;
+    max-width: min(42vw, 360px);
+    margin: 0 !important;
+    padding: 9px 14px !important;
+    border-radius: 999px !important;
+    overflow: hidden;
+    color: #334155 !important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background: rgba(255,255,255,0.72) !important;
+    box-shadow: 0 8px 20px rgba(15,23,42,0.08);
+    font-size: 13px !important;
+    font-weight: 800 !important;
+  }
+
+  body.app-ready #app-header .header-actions {
+    position: relative !important;
+    z-index: 50 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 10px !important;
+    margin-left: auto !important;
+    flex: 0 0 auto !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
+
+  body.app-ready #app-header .header-actions .change-pass-fancy-btn,
+  body.app-ready #app-header .header-actions .logout-fancy-btn {
+    display: inline-flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
+
+  body.app-ready #app-header .header-actions .change-pass-fancy-btn {
+    width: auto !important;
+    min-width: 132px !important;
+    height: 40px !important;
+    padding: 0 14px !important;
+    border-radius: 999px !important;
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.10) !important;
+    font-size: 13px !important;
+  }
+
+  body.app-ready #app-header .header-actions .change-pass-fancy-btn svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+
+  body.app-ready #app-header .header-actions .logout-fancy-btn,
+  body.app-ready #app-header .header-actions .logout-fancy-btn:hover {
+    width: 42px !important;
+    min-width: 42px !important;
+    height: 42px !important;
+    flex: 0 0 42px !important;
+    border-radius: 50% !important;
+  }
+
+  body.app-ready .main-nav {
+    position: relative !important;
+    top: auto !important;
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px !important;
+    width: min(100%, 1180px) !important;
+    margin: 0 auto 18px !important;
+    padding: 7px !important;
+    border-radius: 22px !important;
+    background: rgba(255,255,255,0.80) !important;
+    border: 1px solid rgba(255,255,255,0.70);
+    box-shadow: 0 16px 34px rgba(15,23,42,0.08), inset 0 1px 0 rgba(255,255,255,0.82) !important;
+    backdrop-filter: blur(12px);
+    box-sizing: border-box;
+  }
+
+  body.app-ready .nav-btn.nav-fx {
+    width: 100% !important;
+    height: 44px !important;
+    min-height: 44px !important;
+    margin: 0 !important;
+    border-radius: 16px !important;
+    box-shadow: none !important;
+  }
+
+  body.app-ready .nav-btn.nav-fx span {
+    font-size: 12px !important;
+    letter-spacing: 0.01em !important;
+  }
+
+  body.app-ready #chamcong-view,
+  body.app-ready #thongke-view,
+  body.app-ready #congdoan-view,
+  body.app-ready #admin-ui {
+    width: min(100%, 1180px);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  body.app-ready .tab-container,
+  body.app-ready .filter-container {
+    border-radius: 20px !important;
+    background: rgba(255,255,255,0.78) !important;
+    border: 1px solid rgba(226,232,240,0.80);
+    box-shadow: 0 12px 28px rgba(15,23,42,0.06);
+  }
+
+  body.app-ready .tab-container {
+    padding: 6px !important;
+  }
+
+  body.app-ready .tab-btn {
+    min-height: 40px !important;
+    border-radius: 15px !important;
+    font-size: 13px !important;
+  }
+
+  body.app-ready input[type="text"],
+  body.app-ready input[type="password"],
+  body.app-ready input[type="number"],
+  body.app-ready input[type="month"],
+  body.app-ready input[inputmode="decimal"],
+  body.app-ready select,
+  body.app-ready .search-input {
+    min-height: 44px !important;
+    padding: 11px 14px !important;
+    margin: 8px 0 !important;
+    border-radius: 15px !important;
+    border-color: #dbe3ee !important;
+    background: rgba(255,255,255,0.90) !important;
+    font-size: 14px !important;
+  }
+
+  body.app-ready .btn,
+  body.app-ready .btn-blue {
+    min-height: 44px !important;
+    padding: 11px 16px !important;
+    border-radius: 15px !important;
+    font-size: 14px !important;
+  }
+
+  body.app-ready .btn-blue {
+    background: linear-gradient(135deg, #23c6dc 0%, #4361ee 70%, #5f29c7 100%) !important;
+    box-shadow: 0 10px 22px rgba(67,97,238,0.18) !important;
+  }
+
+  body.app-ready #list-chua-cham,
+  body.app-ready #list-da-cham,
+  body.app-ready #congdoan-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 16px;
+    align-items: start;
+  }
+
+  body.app-ready #thongke-list {
+    display: grid;
+    gap: 14px;
+  }
+
+  body.app-ready .worker-card,
+  body.app-ready .admin-lock-card {
+    margin-bottom: 0 !important;
+    padding: 18px !important;
+    border-radius: 22px !important;
+    border: 1px solid rgba(226,232,240,0.92) !important;
+    background: rgba(255,255,255,0.94) !important;
+    box-shadow: 0 16px 34px rgba(15,23,42,0.08) !important;
+  }
+
+  body.app-ready .w-name {
+    margin-bottom: 8px !important;
+    color: #1e293b;
+    font-size: 18px !important;
+  }
+
+  body.app-ready .badge {
+    border-radius: 999px !important;
+    padding: 5px 10px !important;
+    background: #f1f5f9 !important;
+  }
+
+  body.app-ready .badge-shift {
+    background: #e7edff !important;
+    color: #4361ee !important;
+  }
+
+  body.app-ready .time-row {
+    gap: 10px !important;
+    margin-top: 14px !important;
+  }
+
+  body.app-ready .time-input {
+    height: 46px !important;
+    border-radius: 14px !important;
+    font-size: 18px !important;
+  }
+
+  body.app-ready #thongke-view {
+    padding: 20px !important;
+    border-radius: 26px;
+    background: rgba(255,255,255,0.42);
+    border: 1px solid rgba(255,255,255,0.62);
+    box-shadow: 0 24px 52px rgba(15,23,42,0.08);
+    backdrop-filter: blur(10px);
+    box-sizing: border-box;
+  }
+
+  body.app-ready #thongke-title {
+    margin: 0 0 14px !important;
+    color: #334155 !important;
+    font-size: 17px !important;
+    font-weight: 800 !important;
+  }
+
+  body.app-ready #thongke-view .filter-container {
+    display: grid !important;
+    grid-template-columns: 220px 210px minmax(280px, 1fr);
+    gap: 12px;
+    align-items: center;
+    padding: 12px;
+    margin-bottom: 16px !important;
+  }
+
+  body.app-ready #thongke-view .search-input,
+  body.app-ready #thongke-view .btn-blue {
+    height: 44px;
+    margin: 0 !important;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1320px) {
+  body.app-ready .container {
+    width: calc(100% - 28px) !important;
+  }
+}
+
 </style>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
@@ -2986,7 +3552,7 @@ html.standalone-app .main-nav {
 <div class="header-shooting-3"></div>
 
     <h3 id="acc-display">👤 ...</h3>
-    <div style="display:flex; gap:8px;">
+    <div class="header-actions" style="display:flex; gap:8px;">
         <button class="change-pass-fancy-btn" onclick="openChangePassword()" title="Đổi mật khẩu">
   <svg
     height="24"
@@ -3180,19 +3746,25 @@ html.standalone-app .main-nav {
 </div>
 
     <div id="admin-ui">
-        <div style="background:white; padding:15px; border-radius:12px; margin-bottom:20px; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
-            <h4 style="margin-top:0; color:var(--primary);">Thêm Tài Khoản</h4>
-            <input type="text" id="new-user" placeholder="Tên tài khoản (Ví dụ: LAN)">
-            <input type="text" id="new-pass" placeholder="Mật khẩu">
-            <select id="new-role" style="width:100%; padding:14px; margin-bottom:10px; border-radius:12px; border:1px solid #ddd; font-size:16px;">
-                <option value="USER">Chuyền Trưởng (USER)</option>
-                <option value="ADMIN">Quản Trị Viên (ADMIN)</option>
-            </select>
-            <button class="btn btn-blue" onclick="addAccount()">+ THÊM</button>
+        <div class="admin-lock-card">
+            <h4 class="admin-lock-title">Khóa nhập tăng ca</h4>
+            <p class="admin-lock-hint">Tự động khi đến giờ này, ca tương ứng sẽ không nhập hoặc lưu tăng ca được nữa.</p>
+            <div class="admin-lock-grid">
+                <label class="admin-lock-field"><span>Ca F</span><input type="text" inputmode="numeric" id="ot-lock-F" class="ot-lock-input" placeholder="HH:MM" maxlength="5" onfocus="renderSuggestions(this)" onclick="renderSuggestions(this)" oninput="cleanOvertimeLockTyping(this); renderSuggestions(this)" onchange="formatOvertimeLockInput(this)"></label>
+                <label class="admin-lock-field"><span>Ca S</span><input type="text" inputmode="numeric" id="ot-lock-S" class="ot-lock-input" placeholder="HH:MM" maxlength="5" onfocus="renderSuggestions(this)" onclick="renderSuggestions(this)" oninput="cleanOvertimeLockTyping(this); renderSuggestions(this)" onchange="formatOvertimeLockInput(this)"></label>
+                <label class="admin-lock-field"><span>Ca C</span><input type="text" inputmode="numeric" id="ot-lock-C" class="ot-lock-input" placeholder="HH:MM" maxlength="5" onfocus="renderSuggestions(this)" onclick="renderSuggestions(this)" oninput="cleanOvertimeLockTyping(this); renderSuggestions(this)" onchange="formatOvertimeLockInput(this)"></label>
+            </div>
+            <div class="admin-lock-actions">
+                <button class="btn btn-blue" id="save-ot-locks-btn" onclick="saveOvertimeLocks()">Lưu khóa tăng ca</button>
+                <div class="admin-lock-status" id="ot-lock-status"></div>
+            </div>
         </div>
-        <h4 style="color:var(--text-muted); margin-bottom:10px;">DANH SÁCH</h4>
-        <div id="admin-user-list"></div>
-        <button class="btn btn-save" onclick="saveAdminData()">💾 LƯU THAY ĐỔI</button>
+        <div class="admin-lock-card admin-unlock-card">
+            <h4 class="admin-lock-title">Mở nhập cho từng người</h4>
+            <p class="admin-lock-hint">Khi ca đã tới giờ khóa, người được mở bên dưới vẫn nhập và lưu tăng ca được trong ngày hôm nay.</p>
+            <input type="text" id="ot-unlock-search" class="admin-unlock-search" placeholder="Tìm theo số thẻ, tên, chuyền, ca..." oninput="renderOvertimeUnlockWorkerList()">
+            <div id="ot-unlock-list" class="admin-unlock-list"></div>
+        </div>
     </div>
 </div>
 <div id="change-pass-modal" class="modal-overlay" onclick="if(event.target === this) closeChangePassword()">
@@ -3227,10 +3799,12 @@ html.standalone-app .main-nav {
 </div>
 <script>
     // DÁN LẠI LINK APP SCRIPT MỚI NHẤT VÀO ĐÂY:
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxjwEGgbVuCywt2vRMxXETpsz5HhMS7Ph-SZDDr9V1u4gqdh9Qiv91JAXHSxqbRAgY/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2exgUi7eG3zKiAoKphoxd3LPGQbtD828tuPcdmbNZLAQBGrUV2h_OSGC7JF0x6Vc/exec";
     let currentUser = "";
     let serverData = {}; 
     let accountList = []; 
+    let overtimeLocks = { F: "", S: "", C: "" };
+    let overtimeUnlocks = [];
     let currentShift = "ALL"; 
     let currentSearch = ""; 
     let loginLoading = false;
@@ -3238,6 +3812,9 @@ html.standalone-app .main-nav {
     let currentRole = "";
     let currentPass = "";
     let sessionToken = "";
+    let overtimeAutoSyncTimer = null;
+    let overtimeAutoSyncBusy = false;
+    const ENABLE_OVERTIME_LOCK_FEATURE = false;
 
 async function apiPost(payload, expectJson) {
     const body = Object.assign({}, payload);
@@ -3250,7 +3827,14 @@ async function apiPost(payload, expectJson) {
         body: JSON.stringify(body)
     });
 
-    return expectJson ? await res.json() : await res.text();
+    const text = await res.text();
+    if (!expectJson) return text;
+
+    try {
+        return JSON.parse(text);
+    } catch (err) {
+        throw new Error(text || "Server không trả JSON hợp lệ.");
+    }
 }
 
 function getDinoSavingHtml(message) {
@@ -3425,6 +4009,11 @@ async function loadReportMonth() {
             serverData.taikhoan = data.taikhoan;
             accountList = data.taikhoan;
         }
+        if (data.overtimeLocks || data.overtimeUnlocks) {
+            serverData.overtimeLocks = data.overtimeLocks;
+            serverData.overtimeUnlocks = data.overtimeUnlocks;
+            syncOvertimeLocks(serverData);
+        }
     } catch (e) {
         console.log("Không tải được dữ liệu tháng từ server.", e);
     }
@@ -3437,6 +4026,140 @@ async function loadReportMonth() {
         let hr = h < 10 ? "0"+h : h;
         fullTimeSlots.push(hr + ":00");
         fullTimeSlots.push(hr + ":30");
+    }
+
+    function normalizeOvertimeLocks(raw) {
+        const source = raw && typeof raw === "object" ? raw : {};
+        return {
+            F: typeof source.F === "string" ? source.F : "",
+            S: typeof source.S === "string" ? source.S : "",
+            C: typeof source.C === "string" ? source.C : ""
+        };
+    }
+
+    function normalizeOvertimeUnlocks(raw) {
+        const source = Array.isArray(raw) ? raw : [];
+        const seen = new Set();
+        const clean = [];
+
+        source.forEach(item => {
+            if (!item || item.id === undefined || item.id === null) return;
+            const id = item.id.toString().trim();
+            const shift = normalizeShiftText(item.shift || item.ca || "");
+            if (!id || !shift) return;
+
+            const key = `${id}||${shift}`;
+            if (seen.has(key)) return;
+            seen.add(key);
+            clean.push({ id, shift });
+        });
+
+        return clean;
+    }
+
+    function syncOvertimeLocks(data) {
+        overtimeLocks = normalizeOvertimeLocks(data && data.overtimeLocks);
+        overtimeUnlocks = normalizeOvertimeUnlocks(data && data.overtimeUnlocks);
+        renderOvertimeLockAdmin();
+        renderOvertimeUnlockWorkerList();
+        updateSaveButtonVisibility();
+    }
+
+    function normalizeShiftText(value) {
+        return value === undefined || value === null ? "" : value.toString().trim().toUpperCase();
+    }
+
+    function timeTextToMinutes(timeText) {
+        const parts = (timeText || "").split(":");
+        if (parts.length !== 2) return -1;
+        return Number(parts[0]) * 60 + Number(parts[1]);
+    }
+
+    function getVietnamNowMinutes() {
+        const text = new Intl.DateTimeFormat("en-GB", {
+            timeZone: "Asia/Ho_Chi_Minh",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false
+        }).format(new Date());
+        return timeTextToMinutes(text);
+    }
+
+    function isOvertimeShiftLocked(shift) {
+        if (!ENABLE_OVERTIME_LOCK_FEATURE) return false;
+        const shiftKey = normalizeShiftText(shift);
+        const lockTime = overtimeLocks[shiftKey];
+        if (!lockTime) return false;
+
+        const current = getVietnamNowMinutes();
+        return current >= timeTextToMinutes(lockTime);
+    }
+
+    function getOvertimeUnlockKey(id, shift) {
+        return `${(id || "").toString().trim()}||${normalizeShiftText(shift)}`;
+    }
+
+    function isOvertimeWorkerUnlocked(id, shift) {
+        const key = getOvertimeUnlockKey(id, shift);
+        return overtimeUnlocks.some(item => getOvertimeUnlockKey(item.id, item.shift) === key);
+    }
+
+    function getOvertimeLockMessage(shift) {
+        const shiftKey = normalizeShiftText(shift);
+        const lockTime = overtimeLocks[shiftKey] || "";
+        return lockTime ? `Ca ${shiftKey} đã khóa nhập tăng ca sau ${lockTime}.` : "";
+    }
+
+    function startOvertimeAutoSync() {
+        if (overtimeAutoSyncTimer) clearInterval(overtimeAutoSyncTimer);
+        if (!ENABLE_OVERTIME_LOCK_FEATURE) return;
+        if (!sessionToken || currentRole === "ADMIN") return;
+
+        overtimeAutoSyncTimer = setInterval(syncOvertimeStateFromServer, 30000);
+    }
+
+    function hasUnsavedAttendanceDraft() {
+        const chamCongView = document.getElementById('chamcong-view');
+        if (!chamCongView || chamCongView.style.display === 'none') return false;
+
+        const active = document.activeElement;
+        if (active && active.closest && active.closest('#chamcong-view') && active.classList.contains('time-input')) {
+            return true;
+        }
+
+        return Array.from(document.querySelectorAll('#chamcong-view .active-card .time-input'))
+            .some(input => (input.value || '').trim() !== '');
+    }
+
+    async function syncOvertimeStateFromServer() {
+        if (!ENABLE_OVERTIME_LOCK_FEATURE) return;
+        if (!sessionToken || currentRole === "ADMIN" || overtimeAutoSyncBusy) return;
+        if (document.hidden) return;
+
+        const hasDraft = hasUnsavedAttendanceDraft();
+        overtimeAutoSyncBusy = true;
+        try {
+            const data = await apiPost({
+                action: "load_data",
+                month: getSelectedReportMonth()
+            }, true);
+
+            if (!data || data.ok === false) return;
+
+            serverData = data;
+            accountList = Array.isArray(serverData.taikhoan) ? serverData.taikhoan : accountList;
+            initialDataPromise = Promise.resolve(serverData);
+            syncOvertimeLocks(serverData);
+
+            const chamCongView = document.getElementById('chamcong-view');
+            if (chamCongView && chamCongView.style.display !== 'none' && !hasDraft) {
+                renderWorkerList();
+            }
+        } catch (e) {
+            console.log("Không đồng bộ được trạng thái khóa tăng ca.", e);
+        } finally {
+            overtimeAutoSyncBusy = false;
+        }
     }
 
     function loadServerData() {
@@ -3458,6 +4181,7 @@ async function loadReportMonth() {
 
         serverData = data || {};
         accountList = Array.isArray(serverData.taikhoan) ? serverData.taikhoan : [];
+        syncOvertimeLocks(serverData);
         return serverData;
     }).catch(err => {
         initialDataPromise = null;
@@ -3503,8 +4227,10 @@ async function loadReportMonth() {
         currentRole = data.role || "USER";
         serverData = data.data || {};
         accountList = Array.isArray(serverData.taikhoan) ? serverData.taikhoan : [];
+        syncOvertimeLocks(serverData);
         initialDataPromise = Promise.resolve(serverData);
 
+        document.body.classList.add("app-ready");
         document.getElementById("acc-display").innerText = `👤 ${currentUser} (${currentRole})`;
         const loginUI = document.getElementById("login-ui");
         const appHeader = document.getElementById("app-header");
@@ -3535,7 +4261,7 @@ async function loadReportMonth() {
         hideLoginLoader();
         btn.disabled = false;
         btn.innerText = "VÀO HỆ THỐNG";
-        alert("Có lỗi khi đăng nhập!");
+        alert(err && err.message ? err.message : "Có lỗi khi đăng nhập!");
     }
 }
 function openChangePassword() {
@@ -3981,6 +4707,7 @@ function hideLoginLoader() {
     // RENDER THỐNG KÊ CÓ GIAO DIỆN 5 Ô CÂN ĐỐI
     // =====================================
 function renderMainMenu() {
+    document.body.classList.add('app-ready');
     const loginUI = document.getElementById('login-ui');
     if (loginUI) {
         loginUI.style.display = 'none';
@@ -3989,14 +4716,19 @@ function renderMainMenu() {
     document.getElementById('loading').style.display = 'none';
 
     if (currentRole === 'ADMIN') {
-        document.getElementById('main-ui').style.display = 'none';
-        document.getElementById('admin-ui').style.display = 'block';
+        document.body.classList.add('admin-mode');
+        document.getElementById('main-ui').style.setProperty('display', 'block', 'important');
+        document.getElementById('admin-ui').style.setProperty('display', 'block', 'important');
+        renderOvertimeLockAdmin();
+        renderOvertimeUnlockWorkerList();
         renderAdminList();
         return;
     }
 
-    document.getElementById('admin-ui').style.display = 'none';
-    document.getElementById('main-ui').style.display = 'block';
+    document.body.classList.remove('admin-mode');
+    document.getElementById('admin-ui').style.setProperty('display', 'none', 'important');
+    document.getElementById('main-ui').style.setProperty('display', 'block', 'important');
+    startOvertimeAutoSync();
 
     populateShiftFilter();
 initReportMonth();
@@ -4335,6 +5067,12 @@ function updateWorkerCardState(card) {
   }
 }
 
+function normalizeTctInput(input) {
+  if (!input) return;
+  const clean = (input.value || "").replace(/\D/g, "");
+  input.value = clean.includes("1") ? "1" : "";
+}
+
 function bindWorkerCardInputEvents() {
   document.querySelectorAll('.active-card').forEach(card => {
     const inputs = card.querySelectorAll('.in-lenca, .in-xuongca, .in-tct');
@@ -4361,13 +5099,17 @@ function renderWorkerList() {
         if (filtered.length === 0) {
             document.getElementById('list-chua-cham').innerHTML = `<div class="worker-card" style="text-align:center; color:var(--danger)">Không tìm thấy công nhân phù hợp!</div>`;
             document.getElementById('list-da-cham').innerHTML = `<div class="worker-card" style="text-align:center; color:var(--danger)">Không có dữ liệu!</div>`;
-            document.getElementById('btn-chua').innerText = `CHƯA CHẤM (0)`; document.getElementById('btn-da').innerText = `ĐÃ LƯU (0)`; return;
+            document.getElementById('btn-chua').innerText = `CHƯA CHẤM (0)`; document.getElementById('btn-da').innerText = `ĐÃ LƯU (0)`;
+            updateSaveButtonVisibility();
+            return;
         }
 
         let htmlChua = "", htmlDa = "", countChua = 0, countDa = 0;
 
         filtered.forEach(w => {
             const isRecorded = w[w.length - 4], savedLenCa = w[w.length - 3], savedXuongCa = w[w.length - 2], savedTCT = w[w.length - 1];
+            const shift = normalizeShiftText(w[5]);
+            const shiftLocked = isOvertimeShiftLocked(shift) && !isOvertimeWorkerUnlocked(w[0], shift);
 
             if (isRecorded === true) {
                 countDa++;
@@ -4385,25 +5127,29 @@ function renderWorkerList() {
                 </div>`;
             } else {
                 countChua++;
+                const lockAttr = shiftLocked ? "disabled" : "";
+                const lockNote = shiftLocked ? `<div class="overtime-lock-note">${getOvertimeLockMessage(shift)}</div>` : "";
+                const shiftBadgeText = shiftLocked ? `Ca: ${w[5]} - Khóa ${overtimeLocks[shift]}` : `Ca: ${w[5]}`;
                 htmlChua += `
-                <div class="worker-card active-card">
+                <div class="worker-card active-card ${shiftLocked ? 'overtime-locked-card' : ''}">
                     <div class="w-name">👤 ${w[1]}</div>
-                    <div class="w-details"><span class="badge">Thẻ: ${w[0]}</span> <span class="badge">Bậc: ${w[2]}</span> <span class="badge">Chuyền: ${w[3]}</span> <span class="badge badge-shift">Ca: ${w[5]}</span></div>
+                    <div class="w-details"><span class="badge">Thẻ: ${w[0]}</span> <span class="badge">Bậc: ${w[2]}</span> <span class="badge">Chuyền: ${w[3]}</span> <span class="badge badge-shift ${shiftLocked ? 'badge-locked' : ''}">${shiftBadgeText}</span></div>
+                    ${lockNote}
                     <div class="time-row">
                         <div class="time-wrapper">
                             <label>GIỜ LÊN CA</label>
                             <input type="text" inputmode="decimal" class="time-input in-lenca" 
                                 onfocus="renderSuggestions(this)" onclick="renderSuggestions(this)" oninput="renderSuggestions(this)" onchange="formatTime(this)"
-                                data-id="${w[0]}" data-name="${w[1]}" data-capbac="${w[2]}" data-chuyen="${w[3]}" data-ca="${w[5] || ''}" placeholder="--:--">
+                                data-id="${w[0]}" data-name="${w[1]}" data-capbac="${w[2]}" data-chuyen="${w[3]}" data-ca="${w[5] || ''}" placeholder="--:--" ${lockAttr}>
                         </div>
                         <div class="time-wrapper">
                             <label>GIỜ XUỐNG CA</label>
                             <input type="text" inputmode="decimal" class="time-input in-xuongca" 
-                                onfocus="renderSuggestions(this)" onclick="renderSuggestions(this)" oninput="renderSuggestions(this)" onchange="formatTime(this)" placeholder="--:--">
+                                onfocus="renderSuggestions(this)" onclick="renderSuggestions(this)" oninput="renderSuggestions(this)" onchange="formatTime(this)" placeholder="--:--" ${lockAttr}>
                         </div>
                         <div class="time-wrapper">
                             <label>TCT</label>
-                            <input type="number" step="0.5" inputmode="decimal" class="time-input in-tct" placeholder="">
+                            <input type="text" inputmode="numeric" maxlength="1" class="time-input in-tct" placeholder="" oninput="normalizeTctInput(this)" ${lockAttr}>
                         </div>
                     </div>
                 </div>`;
@@ -4414,6 +5160,7 @@ function renderWorkerList() {
         document.getElementById('list-da-cham').innerHTML = htmlDa || `<div class="worker-card" style="text-align:center;">Chưa có dữ liệu.</div>`;
         document.getElementById('btn-chua').innerText = `CHƯA CHẤM (${countChua})`; document.getElementById('btn-da').innerText = `ĐÃ LƯU (${countDa})`;
         bindWorkerCardInputEvents();
+        updateSaveButtonVisibility();
     }
 
     function renderSuggestions(inputNode) {
@@ -4445,7 +5192,7 @@ function renderWorkerList() {
 
   if (slotsToShow.length === 0) return;
 
-  const wrapper = inputNode.closest('.time-wrapper');
+  const wrapper = inputNode.closest('.time-wrapper, .admin-lock-field');
 const card = inputNode.closest('.worker-card');
 if (card) card.classList.add('suggestion-layer');
   if (!wrapper) return;
@@ -4498,7 +5245,7 @@ function closeAllSuggestions() {
 }
 
 function isInsideSuggestionArea(target) {
-  return !!target.closest('.time-wrapper') || !!target.closest('.suggestions-box');
+  return !!target.closest('.time-wrapper') || !!target.closest('.admin-lock-field') || !!target.closest('.suggestions-box');
 }
 
 document.addEventListener('pointerdown', function(e) {
@@ -4517,6 +5264,10 @@ document.addEventListener('focusin', function(e) {
   if (!isInsideSuggestionArea(e.target)) {
     closeAllSuggestions();
   }
+});
+
+document.addEventListener('visibilitychange', function() {
+  if (!document.hidden) syncOvertimeStateFromServer();
 });
 
 if (window.innerWidth > 768) {
@@ -4550,13 +5301,22 @@ if (window.innerWidth > 768) {
         document.querySelectorAll('.time-input').forEach(input => input.style.border = "none");
 
         cards.forEach(c => {
+            if (c.classList.contains('overtime-locked-card')) return;
             const lencaIn = c.querySelector('.in-lenca');
             const xuongcaIn = c.querySelector('.in-xuongca');
             const lenca = lencaIn.value.trim();
             const xuongca = xuongcaIn.value.trim();
-            const tct = c.querySelector('.in-tct').value.trim();
+            const tctInput = c.querySelector('.in-tct');
+            normalizeTctInput(tctInput);
+            const tct = tctInput.value.trim();
 
             if (lenca !== "" || xuongca !== "" || tct !== "") {
+                if (tct !== "" && tct !== "1") {
+                    hasError = true;
+                    if (errorMsg === "") errorMsg = `TCT chỉ được nhập số 1 cho:\n👤 ${lencaIn.dataset.name}`;
+                    tctInput.style.border = "2px solid var(--danger)";
+                    return;
+                }
                 if (lenca === "" || xuongca === "") {
                     hasError = true;
                     if (errorMsg === "") {
@@ -4565,13 +5325,19 @@ if (window.innerWidth > 768) {
                     if (lenca === "") lencaIn.style.border = "2px solid var(--danger)";
                     if (xuongca === "") xuongcaIn.style.border = "2px solid var(--danger)";
                 } else {
+                    const shift = lencaIn.dataset.ca || "";
+                    if (isOvertimeShiftLocked(shift) && !isOvertimeWorkerUnlocked(lencaIn.dataset.id, shift)) {
+                        hasError = true;
+                        if (errorMsg === "") errorMsg = getOvertimeLockMessage(shift);
+                        return;
+                    }
                     payloadData.push({
                         id: lencaIn.dataset.id,
                         name: lencaIn.dataset.name,
                         capbac: lencaIn.dataset.capbac,
                         chuyen: lencaIn.dataset.chuyen,
                         acc: currentUser,
-                        ca: lencaIn.dataset.ca || "",
+                        ca: shift,
                         lenca: timeTo6Digits(lenca),
                         xuongca: timeTo6Digits(xuongca),
                         tct: tct
@@ -4594,6 +5360,20 @@ if (window.innerWidth > 768) {
         }
 
         if (payloadData.length === 0) {
+            const lockedVisible = document.querySelector('.overtime-locked-card');
+            if (lockedVisible) {
+                const lockText = lockedVisible.querySelector('.badge-locked') ? lockedVisible.querySelector('.badge-locked').textContent : "Ca này đã khóa nhập tăng ca.";
+                if (typeof Swal !== "undefined") {
+                    await Swal.fire({
+                        icon: "warning",
+                        title: "Đã khóa nhập",
+                        text: lockText
+                    });
+                } else {
+                    alert(lockText);
+                }
+                return;
+            }
             if (typeof Swal !== "undefined") {
                 await Swal.fire({
                     icon: "info",
@@ -4646,6 +5426,11 @@ try {
         data: payloadData
     }, false);
 
+    const saveText = (text || "").toLowerCase();
+    if ((saveText.includes("đã khóa") || saveText.includes("da khoa")) && !saveText.includes("thành công") && !saveText.includes("thanh cong")) {
+        throw new Error(text);
+    }
+
     // 2. Đồng bộ lại dữ liệu ngầm, không gọi reloadData()
     const data = await apiPost({
         action: "load_data",
@@ -4660,6 +5445,7 @@ try {
 
     // 3. Cập nhật dữ liệu vào biến hiện tại
     serverData = data;
+    syncOvertimeLocks(serverData);
 
     if (Array.isArray(data.taikhoan)) {
         accountList = data.taikhoan;
@@ -4727,6 +5513,7 @@ try {
 
         serverData = data;
         accountList = Array.isArray(serverData.taikhoan) ? serverData.taikhoan : accountList;
+        syncOvertimeLocks(serverData);
         initialDataPromise = Promise.resolve(serverData);
         document.getElementById('loading').style.display = 'none';
         document.getElementById('main-ui').style.display = 'block';
@@ -4741,11 +5528,265 @@ try {
     // QUẢN LÝ ADMIN
     // =====================================
     function renderAdminList() {
-        document.getElementById('admin-user-list').innerHTML = accountList.map((acc, i) => !acc[0] ? "" : `
+        const listEl = document.getElementById('admin-user-list');
+        if (!listEl) return;
+        if (!Array.isArray(accountList)) accountList = [];
+        listEl.innerHTML = accountList.map((acc, i) => !acc[0] ? "" : `
             <div class="admin-card">
                 <div><div style="font-size:16px; font-weight:bold; color:var(--text-main)">${acc[0]}</div><div style="font-size:12px; color:var(--text-muted)">Quyền: <b style="color:${acc[2]=='ADMIN'?'var(--danger)':'var(--success)'}">${acc[2]}</b></div></div>
                 <div style="display:flex; gap:8px;"><button class="admin-action-btn btn-edit" onclick="changePass(${i})">Đổi Pass</button><button class="admin-action-btn btn-del" onclick="deleteAccount(${i})">Xóa</button></div>
             </div>`).join('');
+    }
+    function cleanOvertimeLockTyping(input) {
+        input.value = input.value.replace(/[^\d:]/g, "").slice(0, 5);
+    }
+
+    function normalizeOvertimeLockInput(value) {
+        let text = (value || "").trim();
+        if (!text) return "";
+
+        if (/^\d{1,2}$/.test(text)) {
+            text = `${text.padStart(2, "0")}:00`;
+        } else if (/^\d{3,4}$/.test(text)) {
+            text = text.padStart(4, "0");
+            text = `${text.slice(0, 2)}:${text.slice(2, 4)}`;
+        }
+
+        const match = text.match(/^(\d{1,2}):(\d{2})$/);
+        if (!match) throw new Error("Giờ khóa phải nhập dạng 24h, ví dụ 17:30 hoặc 1730.");
+
+        const hour = Number(match[1]);
+        const minute = Number(match[2]);
+        if (hour < 0 || hour > 23 || minute < 0 || minute > 59) {
+            throw new Error("Giờ khóa không hợp lệ. Vui lòng nhập từ 00:00 đến 23:59.");
+        }
+
+        return `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
+    }
+
+    function formatOvertimeLockInput(input) {
+        try {
+            input.value = normalizeOvertimeLockInput(input.value);
+        } catch (e) {
+            alert(e.message);
+            input.value = "";
+            input.focus();
+        }
+    }
+
+    function renderOvertimeLockAdmin() {
+        ["F", "S", "C"].forEach(shift => {
+            const input = document.getElementById(`ot-lock-${shift}`);
+            if (input) input.value = overtimeLocks[shift] || "";
+        });
+
+        const status = document.getElementById('ot-lock-status');
+        if (status) {
+            const items = ["F", "S", "C"].map(shift => `Ca ${shift}: ${overtimeLocks[shift] || "chưa khóa"}`);
+            status.textContent = items.join("  |  ");
+        }
+    }
+
+    async function saveOvertimeLocks() {
+        const btn = document.getElementById('save-ot-locks-btn');
+        const locks = {
+            F: (document.getElementById('ot-lock-F')?.value || "").trim(),
+            S: (document.getElementById('ot-lock-S')?.value || "").trim(),
+            C: (document.getElementById('ot-lock-C')?.value || "").trim()
+        };
+
+        try {
+            ["F", "S", "C"].forEach(shift => {
+                locks[shift] = normalizeOvertimeLockInput(locks[shift]);
+                const input = document.getElementById(`ot-lock-${shift}`);
+                if (input) input.value = locks[shift];
+            });
+        } catch (e) {
+            if (typeof Swal !== "undefined") {
+                await Swal.fire({
+                    icon: "warning",
+                    title: "Giờ chưa hợp lệ",
+                    text: e.message
+                });
+            } else {
+                alert(e.message);
+            }
+            return;
+        }
+
+        if (btn) {
+            btn.disabled = true;
+            btn.textContent = "Đang lưu...";
+        }
+
+        try {
+            showDinoSavingPopup("Hệ thống đang lưu giờ khóa tăng ca.");
+            const result = await apiPost({ action: "save_overtime_locks", locks }, true);
+            closeDinoSavingPopup();
+
+            if (!result || result.ok === false) {
+                throw new Error(result && result.error ? result.error : "Không lưu được giờ khóa tăng ca");
+            }
+
+            overtimeLocks = normalizeOvertimeLocks(result.overtimeLocks || locks);
+            serverData.overtimeLocks = overtimeLocks;
+            renderOvertimeLockAdmin();
+            renderOvertimeUnlockWorkerList();
+            if (Array.isArray(serverData.congnhan)) {
+                renderWorkerList();
+            }
+
+            if (typeof Swal !== "undefined") {
+                await Swal.fire({
+                    icon: "success",
+                    title: "Đã lưu",
+                    text: result.message || "Đã cập nhật giờ khóa tăng ca.",
+                    timer: 1400,
+                    showConfirmButton: false
+                });
+            } else {
+                alert(result.message || "Đã cập nhật giờ khóa tăng ca.");
+            }
+        } catch (e) {
+            closeDinoSavingPopup();
+            if (typeof Swal !== "undefined") {
+                await Swal.fire({
+                    icon: "error",
+                    title: "Lỗi",
+                    text: e && e.message ? e.message : "Không lưu được giờ khóa tăng ca."
+                });
+            } else {
+                alert(e && e.message ? e.message : "Không lưu được giờ khóa tăng ca.");
+            }
+        } finally {
+            if (btn) {
+                btn.disabled = false;
+                btn.textContent = "Lưu khóa tăng ca";
+            }
+        }
+    }
+
+    function getWorkerRowsForUnlock() {
+        const rows = Array.isArray(serverData.congnhan) ? serverData.congnhan : [];
+        const seen = new Set();
+        const clean = [];
+
+        rows.forEach(row => {
+            const id = row[0] ? row[0].toString().trim() : "";
+            const shift = normalizeShiftText(row[5]);
+            if (!id || !shift) return;
+
+            const key = getOvertimeUnlockKey(id, shift);
+            if (seen.has(key)) return;
+            seen.add(key);
+
+            clean.push({
+                id,
+                name: row[1] || "",
+                capbac: row[2] || "",
+                chuyen: row[3] || "",
+                acc: row[4] || "",
+                shift
+            });
+        });
+
+        return clean;
+    }
+
+    function renderOvertimeUnlockWorkerList() {
+        const list = document.getElementById('ot-unlock-list');
+        if (!list) return;
+
+        const searchInput = document.getElementById('ot-unlock-search');
+        const keyword = (searchInput ? searchInput.value : "").toString().toUpperCase().trim();
+        let rows = getWorkerRowsForUnlock();
+
+        if (keyword) {
+            rows = rows.filter(worker => {
+                return [worker.id, worker.name, worker.capbac, worker.chuyen, worker.acc, worker.shift]
+                    .some(value => (value || "").toString().toUpperCase().includes(keyword));
+            });
+        }
+
+        rows = rows.slice(0, 80);
+
+        if (rows.length === 0) {
+            list.innerHTML = `<div class="admin-unlock-empty">Không tìm thấy công nhân phù hợp.</div>`;
+            return;
+        }
+
+        list.innerHTML = rows.map(worker => {
+            const opened = isOvertimeWorkerUnlocked(worker.id, worker.shift);
+            const lockedNow = isOvertimeShiftLocked(worker.shift);
+            const stateText = opened ? "Đang mở nhập" : (lockedNow ? "Đang khóa" : "Chưa tới giờ khóa");
+            const btnText = opened ? "Khóa lại" : "Mở nhập";
+            const safeName = String(worker.name).replace(/'/g, "\\'");
+            return `
+                <div class="admin-unlock-row">
+                    <div>
+                        <div class="admin-unlock-name">${worker.name || "(Không tên)"}</div>
+                        <div class="admin-unlock-meta">Thẻ: ${worker.id} | Ca: ${worker.shift} | Chuyền: ${worker.chuyen || "-"} | ${stateText}</div>
+                    </div>
+                    <button class="admin-unlock-btn ${opened ? 'is-open' : ''}" onclick="toggleOvertimeUnlock('${worker.id}', '${worker.shift}', '${safeName}')">${btnText}</button>
+                </div>`;
+        }).join('');
+    }
+
+    async function toggleOvertimeUnlock(id, shift, name) {
+        const key = getOvertimeUnlockKey(id, shift);
+        const opened = isOvertimeWorkerUnlocked(id, shift);
+        const previousUnlocks = [...overtimeUnlocks];
+
+        if (opened) {
+            overtimeUnlocks = overtimeUnlocks.filter(item => getOvertimeUnlockKey(item.id, item.shift) !== key);
+        } else {
+            overtimeUnlocks.push({ id: id.toString(), shift: normalizeShiftText(shift) });
+        }
+
+        await saveOvertimeUnlocks(name || id, previousUnlocks);
+    }
+
+    async function saveOvertimeUnlocks(label, previousUnlocks) {
+        try {
+            showDinoSavingPopup("Hệ thống đang lưu danh sách mở nhập.");
+            const result = await apiPost({ action: "save_overtime_unlocks", unlocks: overtimeUnlocks }, true);
+            closeDinoSavingPopup();
+
+            if (!result || result.ok === false) {
+                throw new Error(result && result.error ? result.error : "Không lưu được danh sách mở nhập.");
+            }
+
+            overtimeUnlocks = normalizeOvertimeUnlocks(result.overtimeUnlocks || overtimeUnlocks);
+            serverData.overtimeUnlocks = overtimeUnlocks;
+            renderOvertimeUnlockWorkerList();
+
+            if (Array.isArray(serverData.congnhan)) {
+                renderWorkerList();
+            }
+
+            if (typeof Swal !== "undefined") {
+                await Swal.fire({
+                    icon: "success",
+                    title: "Đã cập nhật",
+                    text: result.message || `Đã cập nhật quyền nhập cho ${label}.`,
+                    timer: 1200,
+                    showConfirmButton: false
+                });
+            }
+        } catch (e) {
+            closeDinoSavingPopup();
+            if (Array.isArray(previousUnlocks)) overtimeUnlocks = previousUnlocks;
+            renderOvertimeUnlockWorkerList();
+            if (typeof Swal !== "undefined") {
+                await Swal.fire({
+                    icon: "error",
+                    title: "Lỗi",
+                    text: e && e.message ? e.message : "Không lưu được danh sách mở nhập."
+                });
+            } else {
+                alert(e && e.message ? e.message : "Không lưu được danh sách mở nhập.");
+            }
+        }
     }
     function addAccount() {
         const u = document.getElementById('new-user').value.toUpperCase().trim(), p = document.getElementById('new-pass').value.trim(), r = document.getElementById('new-role').value;
@@ -4782,6 +5823,34 @@ function detectStandaloneApp() {
   }
 }
 
+function updateSaveButtonVisibility() {
+  const btn = document.getElementById('save-btn');
+  if (!btn) return;
+
+  const btnChua = document.getElementById('btn-chua');
+  const chamCongView = document.getElementById('chamcong-view');
+  const isChuaChamTab = btnChua && btnChua.classList.contains('active');
+  const isChamCongViewVisible = chamCongView && chamCongView.style.display !== 'none';
+
+  if (!isChuaChamTab || !isChamCongViewVisible) {
+    btn.style.setProperty('display', 'none', 'important');
+    return;
+  }
+
+  btn.style.setProperty('display', 'flex', 'important');
+
+  const activeCards = Array.from(document.querySelectorAll('.active-card'));
+  const unlockedCards = activeCards.filter(card => !card.classList.contains('overtime-locked-card'));
+  const isLockedOnly = activeCards.length > 0 && unlockedCards.length === 0;
+  const saveBtnText = document.getElementById('save-btn-text');
+
+  btn.disabled = isLockedOnly;
+  btn.classList.toggle('is-overtime-locked', isLockedOnly);
+  if (saveBtnText && saveBtnText.textContent !== "Đang lưu...") {
+    saveBtnText.textContent = isLockedOnly ? "ĐÃ KHÓA NHẬP" : "CHẤM CÔNG (LƯU)";
+  }
+}
+
 function fixSaveButtonInStandalone() {
   const btn = document.getElementById('save-btn');
   if (!btn) return;
@@ -4814,6 +5883,17 @@ function fixSaveButtonInStandalone() {
   btn.style.setProperty('z-index', '2147483647', 'important');
   btn.style.setProperty('visibility', 'visible', 'important');
   btn.style.setProperty('opacity', '1', 'important');
+
+  const activeCards = Array.from(document.querySelectorAll('.active-card'));
+  const unlockedCards = activeCards.filter(card => !card.classList.contains('overtime-locked-card'));
+  const isLockedOnly = activeCards.length > 0 && unlockedCards.length === 0;
+  const saveBtnText = document.getElementById('save-btn-text');
+
+  btn.disabled = isLockedOnly;
+  btn.classList.toggle('is-overtime-locked', isLockedOnly);
+  if (saveBtnText && saveBtnText.textContent !== "Đang lưu...") {
+    saveBtnText.textContent = isLockedOnly ? "ĐÃ KHÓA NHẬP" : "CHẤM CÔNG (LƯU)";
+  }
 }
 </script>
 <div id="login-loading-overlay" class="login-loading-overlay" style="display:none;">
