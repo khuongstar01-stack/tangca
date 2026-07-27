@@ -1,0 +1,700 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Tạo Link Shopee Nhận Mã Giảm Giá | Shopeevn.net/Voucher</title>
+  <meta
+    name="description"
+    content="Dán link sản phẩm Shopee để tạo link mua nhanh và nhận mã giảm giá."
+  />
+  <meta
+    name="keywords"
+    content="shopee affiliate, tạo link shopee, shopee deeplink, tạo link affiliate, shopeevn"
+  />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#ee4d2d" />
+
+  <link rel="canonical" href="https://shopeevn.net/voucher" />
+  <link rel="icon" type="image/png" href="/images/favicon.png?v=3" />
+  <link rel="shortcut icon" type="image/png" href="/images/favicon.png?v=3" />
+  <link rel="apple-touch-icon" href="/images/favicon.png?v=3" />
+  <link rel="stylesheet" href="/style.css" />
+
+  <style>
+    .voucher-result {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 20px;
+      background: #f1f1f1;
+    }
+
+    .product-card {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 12px;
+      border: 1px solid rgba(238, 77, 45, 0.16);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+    }
+
+    .product-image-wrap {
+      width: 92px;
+      min-width: 92px;
+      height: 92px;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #f6f6f6;
+    }
+
+    .product-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .product-info {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .product-voucher-image-box {
+      width: 150px;
+      height: 39px;
+      margin-bottom: 6px;
+      border-radius: 6px;
+      overflow: hidden;
+      background: #ffffff;
+      flex-shrink: 0;
+    }
+
+    .product-voucher-image {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .product-name {
+      color: #2d3344;
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 1.35;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .product-price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-top: 7px;
+      flex-wrap: wrap;
+    }
+
+    .product-price {
+      color: #ee4d2d;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .product-old-price {
+      color: #8a8f99;
+      font-size: 13px;
+      text-decoration: line-through;
+    }
+
+    .affiliate-options {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .affiliate-option {
+      display: grid;
+      grid-template-columns: 48px minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      padding: 12px;
+      border: 2px solid transparent;
+      border-radius: 22px;
+      box-shadow: 0 8px 22px rgba(45, 51, 68, 0.06);
+    }
+
+    .affiliate-option--ig {
+      border-color: #efd5df;
+      background: linear-gradient(105deg, #fff8fa, #fff2ed);
+    }
+
+    .affiliate-option--fb {
+      border-color: #cfe2f6;
+      background: linear-gradient(105deg, #f7fbff, #eef7ff);
+    }
+
+    .social-voucher-icon {
+      display: block;
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+    }
+
+    .social-voucher-icon svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .affiliate-option-copy {
+      min-width: 0;
+    }
+
+    .affiliate-option-title {
+      margin: 0;
+      color: #171717;
+      font-size: 16px;
+      font-weight: 900;
+      line-height: 1.25;
+    }
+
+    .affiliate-option-subtitle {
+      margin: 2px 0 0;
+      color: #242424;
+      font-size: 14px;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+
+    .voucher-action {
+      display: inline-flex;
+      min-width: 108px;
+      min-height: 46px;
+      gap: 7px;
+      align-items: center;
+      justify-content: center;
+      padding: 0 12px;
+      border-radius: 14px;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 900;
+      line-height: 1;
+      text-decoration: none;
+      white-space: nowrap;
+      box-shadow: 0 8px 16px rgba(45, 51, 68, 0.15);
+    }
+
+    .voucher-action--ig {
+      background: linear-gradient(90deg, #f0442f, #ff720d);
+    }
+
+    .voucher-action--fb {
+      background: linear-gradient(90deg, #1877f2, #0875e8);
+    }
+
+    .voucher-action-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    .voucher-action.disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .voucher-guide-image {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: 720px;
+      margin-top: 14px;
+      border-radius: 14px;
+      object-fit: contain;
+      background: #f4f5f7;
+    }
+
+    .voucher-guide-text {
+      white-space: pre-line;
+    }
+
+    @media (max-width: 360px) {
+      .product-voucher-image-box {
+        width: 135px;
+        height: 35px;
+      }
+
+      .affiliate-option {
+        grid-template-columns: 40px minmax(0, 1fr) auto;
+        gap: 6px;
+        padding: 9px;
+        border-radius: 18px;
+      }
+
+      .social-voucher-icon {
+        width: 40px;
+        height: 40px;
+      }
+
+      .affiliate-option-title {
+        font-size: 13px;
+      }
+
+      .affiliate-option-subtitle {
+        font-size: 11px;
+      }
+
+      .voucher-action {
+        min-width: 91px;
+        min-height: 40px;
+        gap: 4px;
+        padding: 0 7px;
+        border-radius: 12px;
+        font-size: 12px;
+      }
+
+      .voucher-action-icon {
+        width: 17px;
+        height: 17px;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .voucher-result {
+        padding: 16px;
+        border-radius: 24px;
+      }
+
+      .product-card {
+        gap: 16px;
+        padding: 16px;
+        border-radius: 22px;
+      }
+
+      .product-image-wrap {
+        width: 130px;
+        min-width: 130px;
+        height: 130px;
+        border-radius: 18px;
+      }
+
+      .product-voucher-image-box {
+        width: 220px;
+        height: 57px;
+        margin-bottom: 10px;
+      }
+
+      .product-name {
+        font-size: 22px;
+      }
+
+      .product-price {
+        font-size: 28px;
+      }
+
+      .product-old-price {
+        font-size: 17px;
+      }
+
+      .affiliate-options {
+        gap: 14px;
+      }
+
+      .affiliate-option {
+        grid-template-columns: 68px minmax(0, 1fr) auto;
+        gap: 18px;
+        padding: 18px 22px;
+        border-radius: 28px;
+      }
+
+      .social-voucher-icon {
+        width: 68px;
+        height: 68px;
+      }
+
+      .affiliate-option-title {
+        font-size: 25px;
+      }
+
+      .affiliate-option-subtitle {
+        font-size: 21px;
+      }
+
+      .voucher-action {
+        min-width: 190px;
+        min-height: 64px;
+        gap: 10px;
+        padding: 0 22px;
+        border-radius: 20px;
+        font-size: 22px;
+      }
+
+      .voucher-action-icon {
+        width: 28px;
+        height: 28px;
+      }
+    }
+  </style>
+
+  <meta property="og:locale" content="vi_VN" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Shopeevn.net/Voucher" />
+  <meta property="og:url" content="https://shopeevn.net/voucher" />
+  <meta property="og:title" content="Tạo Link Shopee Nhận Mã Giảm Giá" />
+  <meta property="og:description" content="Công cụ hỗ trợ nhận mã giảm giá Shopee." />
+  <meta property="og:image" content="https://shopeevn.net/images/preview-share-v2.jpg" />
+  <meta property="og:image:secure_url" content="https://shopeevn.net/images/preview-share-v2.jpg" />
+  <meta name="twitter:image" content="https://shopeevn.net/images/preview-share-v2.jpg" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta
+    property="og:image:alt"
+    content="Công cụ tạo link Shopee nhận mã giảm giá nhanh chóng tại Shopeevn.net/Voucher"
+  />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Tạo Link Shopee Nhận Mã Giảm Giá" />
+  <meta
+    name="twitter:description"
+    content="Dán link sản phẩm Shopee để tạo link mua nhanh và nhận mã giảm giá"
+  />
+  <meta name="twitter:image" content="https://shopeevn.net/images/preview-share.jpg" />
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Shopeevn.net/Voucher",
+      "url": "https://shopeevn.net/voucher",
+      "description": "Công cụ tạo link Shopee nhận mã giảm giá nhanh chóng, hỗ trợ dán link sản phẩm và tạo link mua ngay.",
+      "inLanguage": "vi-VN"
+    }
+  </script>
+</head>
+
+<body>
+  <main class="page">
+    <header class="hero">
+      <h1 class="hero-title">🔗 Tạo Link Shopee</h1>
+      <div class="hero-domain">Shopeevn.net/Voucher</div>
+    </header>
+
+    <section class="card">
+      <label class="label" for="productUrl">🔒 Link sản phẩm Shopee</label>
+
+      <div class="input-wrap input-wrap-hint" id="inputWrap">
+        <input
+          id="productUrl"
+          class="input"
+          type="text"
+          placeholder="Dán link Shopee vào đây..."
+          autocomplete="off"
+          spellcheck="false"
+          autocapitalize="off"
+          autocorrect="off"
+        />
+
+        <button id="pasteBtn" class="paste-btn" type="button" title="Dán link" aria-label="Dán link">
+          <div class="icon-conatiner">
+            <svg
+              width="19px"
+              height="21px"
+              viewBox="0 0 19 21"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <g fill="none" fill-rule="evenodd">
+                <path
+                  d="M3.4,4 L11.5,4 L11.5,4 L16,8.25 L16,17.6 C16,19.4777681 14.4777681,21 12.6,21 L3.4,21 C1.52223185,21 0,19.4777681 0,17.6 L0,7.4 C0,5.52223185 1.52223185,4 3.4,4 Z"
+                  fill="#C4FFE4"
+                ></path>
+                <path
+                  d="M6.4,0 L12,0 L12,0 L19,6.5 L19,14.6 C19,16.4777681 17.4777681,18 15.6,18 L6.4,18 C4.52223185,18 3,16.4777681 3,14.6 L3,3.4 C3,1.52223185 4.52223185,0 6.4,0 Z"
+                  fill="#85EBBC"
+                ></path>
+                <path
+                  d="M12,0 L12,5.5 C12,6.05228475 12.4477153,6.5 13,6.5 L19,6.5 L19,6.5 L12,0 Z"
+                  fill="#64B18D"
+                ></path>
+              </g>
+            </svg>
+
+            <svg
+              width="19px"
+              height="21px"
+              viewBox="0 0 19 21"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <g fill="none" fill-rule="evenodd">
+                <path
+                  d="M3.4,4 L11.5,4 L11.5,4 L16,8.25 L16,17.6 C16,19.4777681 14.4777681,21 12.6,21 L3.4,21 C1.52223185,21 0,19.4777681 0,17.6 L0,7.4 C0,5.52223185 1.52223185,4 3.4,4 Z"
+                  fill="#C4FFE4"
+                ></path>
+                <path
+                  d="M6.4,0 L12,0 L12,0 L19,6.5 L19,14.6 C19,16.4777681 17.4777681,18 15.6,18 L6.4,18 C4.52223185,18 3,16.4777681 3,14.6 L3,3.4 C3,1.52223185 4.52223185,0 6.4,0 Z"
+                  fill="#85EBBC"
+                ></path>
+                <path
+                  d="M12,0 L12,5.5 C12,6.05228475 12.4477153,6.5 13,6.5 L19,6.5 L19,6.5 L12,0 Z"
+                  fill="#64B18D"
+                ></path>
+              </g>
+            </svg>
+          </div>
+        </button>
+      </div>
+
+      <button id="createBtn" class="super-button" type="button">
+        <span id="createBtnText">Tạo Link Ngay</span>
+        <svg fill="none" viewBox="0 0 24 24" class="arrow" aria-hidden="true">
+          <path
+            stroke-linejoin="round"
+            stroke-linecap="round"
+            stroke-width="2"
+            stroke="currentColor"
+            d="M5 12h14M13 6l6 6-6 6"
+          ></path>
+        </svg>
+      </button>
+
+      <div id="alertBox" class="alert hidden"></div>
+
+      <div id="resultSection" class="result-section voucher-result hidden">
+        <div id="productCard" class="product-card hidden">
+          <div class="product-image-wrap">
+            <img
+              id="productImage"
+              class="product-image"
+              src=""
+              alt="Sản phẩm Shopee"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          <div class="product-info">
+          
+            <div id="productName" class="product-name">Đang tải sản phẩm...</div>
+
+            <div class="product-price-row">
+              <span id="productPrice" class="product-price"></span>
+              <span id="productOldPrice" class="product-old-price"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="affiliate-options" aria-label="Chọn voucher giảm giá">
+          <article class="affiliate-option affiliate-option--ig">
+            <span class="social-voucher-icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="voucherInstagramGradient" x1="8" y1="58" x2="58" y2="4" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#ffb000" />
+                    <stop offset="0.35" stop-color="#f7405f" />
+                    <stop offset="0.7" stop-color="#c32aa3" />
+                    <stop offset="1" stop-color="#6a3de8" />
+                  </linearGradient>
+                </defs>
+                <rect x="4" y="4" width="56" height="56" rx="17" fill="url(#voucherInstagramGradient)" />
+                <rect x="16" y="16" width="32" height="32" rx="11" fill="none" stroke="#fff" stroke-width="4" />
+                <circle cx="32" cy="32" r="8" fill="none" stroke="#fff" stroke-width="4" />
+                <circle cx="44" cy="20" r="3" fill="#fff" />
+              </svg>
+            </span>
+            <div class="affiliate-option-copy">
+              <h3 class="affiliate-option-title">Voucher Instagram 22%</h3>
+              <p class="affiliate-option-subtitle">(Giảm tối đa 300k)</p>
+            </div>
+            <a
+              id="buyNowBtn2"
+              class="voucher-action voucher-action--ig disabled"
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-disabled="true"
+            >
+              <svg class="voucher-action-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M3 4h2.1l2.1 10.1a2 2 0 0 0 2 1.6h7.9a2 2 0 0 0 2-1.6L20.5 8H6.1" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+                <circle cx="9.5" cy="20" r="1.4" fill="currentColor" />
+                <circle cx="17.5" cy="20" r="1.4" fill="currentColor" />
+              </svg>
+              <span>MUA NGAY</span>
+            </a>
+          </article>
+
+          <article class="affiliate-option affiliate-option--fb">
+            <span class="social-voucher-icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="32" cy="32" r="29" fill="#1877f2" />
+                <path d="M37.5 57V34.2h7.7l1.2-8.9h-8.9v-5.7c0-2.6.7-4.3 4.4-4.3h4.8V7.4c-.8-.1-3.7-.4-7-.4-6.9 0-11.7 4.2-11.7 12v6.3h-7.8v8.9H28V57h9.5Z" fill="#fff" />
+              </svg>
+            </span>
+            <div class="affiliate-option-copy">
+              <h3 class="affiliate-option-title">Voucher FB 22%+25%</h3>
+            </div>
+            <a
+              id="buyNowBtn1"
+              class="voucher-action voucher-action--fb disabled"
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-disabled="true"
+            >
+              <svg class="voucher-action-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M3 4h2.1l2.1 10.1a2 2 0 0 0 2 1.6h7.9a2 2 0 0 0 2-1.6L20.5 8H6.1" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+                <circle cx="9.5" cy="20" r="1.4" fill="currentColor" />
+                <circle cx="17.5" cy="20" r="1.4" fill="currentColor" />
+              </svg>
+              <span>MUA NGAY</span>
+            </a>
+          </article>
+        </div>
+
+        <a
+          id="shareBtn"
+          class="hidden disabled"
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-disabled="true"
+          aria-hidden="true"
+          tabindex="-1"
+        ></a>
+      </div>
+
+      <div class="voucher-guide-card">
+        <div class="voucher-guide-browser">
+          <div class="voucher-guide-circles">
+            <span class="voucher-guide-dot"></span>
+            <span class="voucher-guide-dot"></span>
+            <span class="voucher-guide-dot"></span>
+          </div>
+
+          <div class="voucher-guide-search">
+            🔎 shopeevn.net/voucher
+          </div>
+        </div>
+
+        <div class="voucher-guide-body">
+          <div id="voucherGuideTitle" class="voucher-guide-title">📌 Hướng dẫn nhận mã giảm giá</div>
+          <div id="voucherGuideText" class="voucher-guide-text">
+            Chỉ cần dán link Shopee, bấm <strong>Tạo Link Ngay</strong> rồi chọn
+            <strong>Mã FB 22–25%</strong> hoặc <strong>Mã IG 22%</strong>.
+          </div>
+          <img
+            id="voucherGuideImage"
+            class="voucher-guide-image hidden"
+            src=""
+            alt="Ảnh hướng dẫn nhận mã giảm giá"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="floatingNotice" class="notice-modal hidden" role="dialog" aria-live="polite">
+    <div class="floating-notice-card">
+      <button id="floatingNoticeClose" class="floating-notice-close" type="button" aria-label="Đóng thông báo">
+        ×
+      </button>
+
+      <div class="floating-notice-badge">🔔</div>
+
+      <div class="floating-notice-content">
+        <div id="floatingNoticeTitle" class="floating-notice-title">Thông báo</div>
+        <div id="floatingNoticeMessage" class="floating-notice-message"></div>
+
+        <img
+          id="floatingNoticeImage"
+          class="floating-notice-image hidden"
+          src=""
+          alt="Thông báo"
+          loading="lazy"
+          decoding="async"
+        />
+
+        <a
+          id="floatingNoticeButton"
+          class="floating-notice-button hidden"
+          href="#"
+          target="_self"
+          rel="noopener noreferrer"
+        >
+          Xem thêm
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div id="toastPopup" class="toast-popup hidden" role="status" aria-live="polite">
+    <div class="toast-card">
+      <svg class="toast-wave" viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M0,256L11.4,240C22.9,224,46,192,69,192C91.4,192,114,224,137,234.7C160,245,183,235,206,213.3C228.6,192,251,160,274,149.3C297.1,139,320,149,343,181.3C365.7,213,389,267,411,282.7C434.3,299,457,277,480,250.7C502.9,224,526,192,549,181.3C571.4,171,594,181,617,208C640,235,663,277,686,256C708.6,235,731,149,754,122.7C777.1,96,800,128,823,165.3C845.7,203,869,245,891,224C914.3,203,937,117,960,112C982.9,107,1006,181,1029,197.3C1051.4,213,1074,171,1097,144C1120,117,1143,107,1166,133.3C1188.6,160,1211,224,1234,218.7C1257.1,213,1280,139,1303,133.3C1325.7,128,1349,192,1371,192C1394.3,192,1417,128,1429,96L1440,64L1440,320L0,320Z"
+        ></path>
+      </svg>
+
+      <div class="toast-icon">
+        <svg class="toast-check-icon" viewBox="0 0 52 52">
+          <circle class="toast-check-circle" cx="26" cy="26" r="24"></circle>
+          <path id="toastCheckMark" class="toast-check-mark" d="M14 27 L22 35 L38 18"></path>
+        </svg>
+      </div>
+
+      <div class="toast-content">
+        <p id="toastMessage" class="toast-message">Tạo link thành công!</p>
+      </div>
+
+      <div class="toast-progress"></div>
+    </div>
+  </div>
+
+  <div id="pageLoader" class="page-loader hidden" aria-hidden="true">
+    <div class="page-loader-box">
+      <svg class="pl" width="240" height="240" viewBox="0 0 240 240">
+        <circle class="pl__ring pl__ring--a" cx="120" cy="120" r="105" fill="none" stroke-width="20" stroke-dasharray="0 660" stroke-dashoffset="-330" stroke-linecap="round"></circle>
+        <circle class="pl__ring pl__ring--b" cx="120" cy="120" r="35" fill="none" stroke-width="20" stroke-dasharray="0 220" stroke-dashoffset="-110" stroke-linecap="round"></circle>
+        <circle class="pl__ring pl__ring--c" cx="85" cy="120" r="70" fill="none" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+        <circle class="pl__ring pl__ring--d" cx="155" cy="120" r="70" fill="none" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+      </svg>
+      <div class="page-loader-text">Chờ chút nhé...</div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const loadedAt = Date.now();
+      const oneHour = 60 * 60 * 1000;
+
+      function reloadIfOldPage() {
+        const isOverOneHour = Date.now() - loadedAt > oneHour;
+
+        if (isOverOneHour) {
+          window.location.reload();
+        }
+      }
+
+      window.addEventListener("focus", reloadIfOldPage);
+
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) {
+          reloadIfOldPage();
+        }
+      });
+
+      window.addEventListener("pageshow", reloadIfOldPage);
+    })();
+  </script>
+
+  <script src="/notice.js?v=20260727-1"></script>
+  <script src="/voucher.js?v=20260725-2"></script>
+</body>
+</html>
